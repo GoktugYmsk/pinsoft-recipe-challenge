@@ -1,60 +1,104 @@
 .container-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
     padding: 20px;
-    background: green;
+    background: rgb(255, 155, 101);
+    width: 100%;
+    height: 94vh;
 
-    .container-content__recipe {
+    .topContent__filter {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        background: yellow;
-        width: 600px;
-        height: 600px;
-        border-radius: 40px;
+        height: 120px;
+        justify-content: center;
 
-        .container-content__recipe__altBox {
+        input {
+            width: 600px;
+        }
+    }
+
+    .altContent {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        overflow: auto;
+        height: 80vh;
+        padding: 20px;
+        width: 100%;
+        gap: 40px;
+        grid-template-columns: repeat(2, 1fr);
+
+
+        .container-content__recipe {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            background: rgb(38, 230, 182);
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            width: 600px;
+            height: 800px;
+            margin-left: 80px;
+            padding: 20px;
+            border-radius: 40px;
 
-            img {
-                width: 400px;
-                height: 400px;
-                object-fit: cover;
+            p {
+                background: rgb(156, 156, 156);
+                overflow: scroll;
+                height: 180px;
+                border-radius: 20px;
+                padding: 30px;
             }
 
+            textarea {
+                width: 100%;
+            }
 
-            .container-content__recipe__altBox__icons {
+            .container-content__recipe__altBox {
                 display: flex;
-                gap: 40px;
-                background: red;
+                align-items: center;
+                justify-content: space-evenly;
+                flex-direction: column;
+                height: 800px;
 
-                .icon {
-                    font-size: 30px;
-                    cursor: pointer;
-
+                img {
+                    width: 400px;
+                    height: 400px;
+                    object-fit: cover;
                 }
 
-                .point {
-                    background: red;
 
-                    .ratingYellow {
-                        color: yellow;
+                .container-content__recipe__altBox__icons {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 60px;
+                    gap: 40px;
+                    background: rgb(255, 155, 101);
+
+                    .icon {
+                        font-size: 30px;
+                        cursor: pointer;
+                        color: white;
                     }
 
-                    .raitingGrey {
-                        color: grey;
+                    .point {
+
+                        .ratingYellow {
+                            color: yellow;
+                        }
+
+                        .raitingGrey {
+                            color: grey;
+                        }
                     }
                 }
+
+
             }
-
-
         }
     }
 }

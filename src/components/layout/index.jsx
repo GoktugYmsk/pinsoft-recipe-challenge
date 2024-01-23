@@ -20,11 +20,11 @@ function Layout() {
                     <Content />
                 </Col>
             </Row>
-            <Row>
+            {/* <Row>
                 <Col md={12} >
                     <Footer />
                 </Col>
-            </Row>
+            </Row> */}
         </div>
     )
 }
