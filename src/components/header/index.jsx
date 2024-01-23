@@ -3,8 +3,8 @@ import './index.scss'
 
 function Header() {
     return (
-        <div>
-
+        <div className='container-header'>
+            <h1>PİNSOFT RECİPE</h1>
         </div>
     )
 }

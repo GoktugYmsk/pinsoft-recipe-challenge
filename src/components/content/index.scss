@@ -1,0 +1,60 @@
+.container-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: green;
+
+    .container-content__recipe {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        background: yellow;
+        width: 600px;
+        height: 600px;
+        border-radius: 40px;
+
+        .container-content__recipe__altBox {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: rgb(38, 230, 182);
+
+            img {
+                width: 400px;
+                height: 400px;
+                object-fit: cover;
+            }
+
+
+            .container-content__recipe__altBox__icons {
+                display: flex;
+                gap: 40px;
+                background: red;
+
+                .icon {
+                    font-size: 30px;
+                    cursor: pointer;
+
+                }
+
+                .point {
+                    background: red;
+
+                    .ratingYellow {
+                        color: yellow;
+                    }
+
+                    .raitingGrey {
+                        color: grey;
+                    }
+                }
+            }
+
+
+        }
+    }
+}
