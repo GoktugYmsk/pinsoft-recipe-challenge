@@ -5,6 +5,23 @@
     background: rgb(243, 116, 47);
     color: white;
 
+    .container-header__login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 40px;
+
+        h5 {
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+
+        .container-header__loginIcon {
+            font-size: 35px;
+        }
+    }
+
     .container-header__logoutIcon {
         display: flex;
         position: absolute;

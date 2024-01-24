@@ -6,17 +6,38 @@
     padding: 20px;
     background: rgb(255, 155, 101);
     width: 100%;
-    height: 94vh;
+    height: 94.5vh;
 
     .topContent__filter {
         display: flex;
         align-items: center;
         height: 120px;
         justify-content: center;
+        gap: 20px;
 
         input {
             width: 600px;
+            border-radius: 20px;
+            border-style: none;
+            padding-left: 20px;
+            height: 40px;
         }
+
+        .topContent__filter__dropdown {
+            border: rgb(236, 127, 25);
+            background-color: rgb(236, 127, 25);
+        }
+
+        .topContent__filter_-dropdownMenu {
+            background-color: white;
+
+            .topContent__filter_-dropdownMenu__hover {
+                &:hover {
+                    background-color: rgb(244, 139, 41);
+                }
+            }
+        }
+
     }
 
     .altContent {
@@ -40,12 +61,13 @@
             background: white;
             width: 600px;
             height: 800px;
-            margin-left: 80px;
+            margin-left: 100px;
             padding: 20px;
             border-radius: 40px;
 
             p {
-                background: rgb(156, 156, 156);
+                background: rgb(255, 155, 101);
+                color: white;
                 overflow: scroll;
                 height: 180px;
                 border-radius: 20px;
@@ -54,6 +76,9 @@
 
             textarea {
                 width: 100%;
+                border-radius: 10px;
+                padding-top: 2px;
+                padding-left: 5px;
             }
 
             .container-content__recipe__altBox {
@@ -67,6 +92,7 @@
                     width: 400px;
                     height: 400px;
                     object-fit: cover;
+                    border-radius: 10px;
                 }
 
 
@@ -76,13 +102,20 @@
                     justify-content: center;
                     width: 100%;
                     height: 60px;
-                    gap: 40px;
+                    gap: 20px;
                     background: rgb(255, 155, 101);
+                    border-radius: 10px;
 
                     .icon {
                         font-size: 30px;
                         cursor: pointer;
                         color: white;
+                    }
+
+                    .deleteIcon {
+                        font-size: 30px;
+                        cursor: pointer;
+                        color: red;
                     }
 
                     .point {
