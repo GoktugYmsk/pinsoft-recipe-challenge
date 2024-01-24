@@ -10,15 +10,20 @@
         align-items: center;
         justify-content: center;
         position: absolute;
+        gap: 20px;
         right: 40px;
 
         h5 {
             margin-top: 10px;
-            margin-left: 20px;
         }
 
         .container-header__loginIcon {
             font-size: 35px;
+        }
+
+        .container-header__hamburger {
+            font-size: 35px;
+            cursor: pointer;
         }
     }
 

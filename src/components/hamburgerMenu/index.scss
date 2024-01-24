@@ -1,0 +1,59 @@
+.container-hamburger {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 600px;
+    background: var(--black) 0% 0% no-repeat padding-box;
+    background: rgb(243, 116, 47);
+    clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%);
+    position: absolute;
+    align-items: flex-end;
+    padding: 40px;
+    z-index: 2;
+    animation-name: slide-in;
+    justify-content: space-between;
+    top: 0;
+    right: 0;
+    animation-duration: 0.5s;
+
+    .container-hamburger__top {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 50px;
+        width: 200px;
+        color: white;
+
+        h3 {
+            display: flex;
+            cursor: pointer;
+        }
+    }
+
+    .socialIconsGroup {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: 80px;
+
+        .socialIcon {
+            font-size: 30px;
+            cursor: pointer;
+        }
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.hamburgerActive {
+    display: flex;
+}

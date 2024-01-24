@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    input: '',
+    isHamburger: false,
 }
 
 export const configure = createSlice({
     name: 'control',
     initialState,
     reducers: {
-        setInput: (state, action) => {
-            state.input = action.payload;
+        setIsHamburger: (state, action) => {
+            state.isHamburger = action.payload;
         },
     }
 })
 
-export const { setInput } = configure.actions
+export const { setIsHamburger } = configure.actions
 
 export default configure.reducer
