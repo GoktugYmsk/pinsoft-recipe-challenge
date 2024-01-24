@@ -1,0 +1,19 @@
+.container-addRecipe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgb(255, 155, 101);
+    height: 100%;
+
+    .container-addRecipe__box {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        background: white;
+        width: 700px;
+        height: 700px;
+        border-radius: 40px;
+    }
+}

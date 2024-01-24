@@ -36,6 +36,7 @@ function HamburgerMenu() {
 
 
     const handleAddClick = () => {
+        dispatch(setIsHamburger(false));
         navigate('/addRecipe');
     };
 
