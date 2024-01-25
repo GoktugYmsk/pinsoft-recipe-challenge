@@ -17,6 +17,8 @@ function Layout() {
         console.log('isHamburger', isHamburger)
     }, [isHamburger]);
 
+    // ürün üstünde edit için popup açılacak bu yüzden opacity için ayrı bir state yaz is hamburger opacity'si için de ayrı olarak kontrol et 
+
     return (
         <>
             <div className={`container-layout ${isHamburger ? 'opacityActive' : ''}`} >

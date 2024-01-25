@@ -40,12 +40,16 @@ function HamburgerMenu() {
         navigate('/addRecipe');
     };
 
+    const handleLogin = () => {
+        navigate('/login');
+    };
+
 
     return (
         <div className={`container-hamburger ${isHamburger ? 'hamburgerActive' : ''}`} >
             <div className='container-hamburger__top' >
                 <h3>Üye Ol</h3>
-                <h3>Giriş yap</h3>
+                <h3 onClick={handleLogin} >Giriş yap</h3>
                 <h3 onClick={handleAddClick} >Tarif ekle</h3>
                 <h3>Şikayet</h3>
                 <h3>İletişim</h3>
