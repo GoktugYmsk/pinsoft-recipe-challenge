@@ -135,3 +135,18 @@
         }
     }
 }
+
+.products-popup-container {
+    display: flex;
+    flex-direction: column;
+
+
+    .products-popup-container__box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 500px;
+        background: rgb(255, 155, 101);
+        color: white;
+    }
+}

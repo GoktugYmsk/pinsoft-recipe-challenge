@@ -180,11 +180,11 @@ function Content() {
                         <Modal.Title>Edit Recipe</Modal.Title>
                     </Modal.Header>
                     <Modal.Body className='products-popup-container__box'>
-                        <label>Name:</label>
+                        <h3>Name:</h3>
                         <input type="text" value={editRecipeName} onChange={(e) => setEditRecipeName(e.target.value)} />
-                        <label>Content:</label>
+                        <h3>Content:</h3>
                         <textarea value={editRecipeContent} onChange={(e) => setEditRecipeContent(e.target.value)} />
-                        <label>Category:</label>
+                        <h3>Category:</h3>
                         <input type="text" value={editRecipeCategory} onChange={(e) => setEditRecipeCategory(e.target.value)} />
                     </Modal.Body>
                     <Modal.Footer>
