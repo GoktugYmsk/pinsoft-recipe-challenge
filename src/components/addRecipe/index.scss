@@ -15,5 +15,53 @@
         width: 700px;
         height: 700px;
         border-radius: 40px;
+
+        .container-addRecipe__box__top {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            width: 80%;
+
+            input {
+                width: 80%;
+            }
+
+            .textare-one {
+                width: 80%;
+                height: 180px;
+            }
+
+            .textare-two {
+                width: 80%;
+                height: 80px;
+            }
+
+        }
+
+        .select {
+            display: flex;
+            width: 60%;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .container-addRecipe__box__down {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+
+            button {
+                color: white;
+                border: rgb(236, 127, 25);
+                background-color: rgb(236, 127, 25);
+                width: 220px;
+
+                &:hover {
+                    background-color: rgb(254, 159, 70);
+                }
+            }
+        }
     }
 }

@@ -17,19 +17,27 @@ function Content() {
     const [isCommenting, setIsCommenting] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [editRecipeName, setEditRecipeName] = useState('');
+    const [editRecipeContent, setEditRecipeContent] = useState('');
+    const [editRecipeCategory, setEditRecipeCategory] = useState('');
 
     const textareRef = useRef();
 
-    const recipes = [
-        { name: 'Yemek adı 1', category: 'Tatlılar', content: 'Lorem ipsum dolor sit amet...' },
-        { name: 'Yemek adı 2', category: 'Çorbalar', content: 'Lorem ipsum dolor sit amet...' },
-        // Diğer yemekler
-    ];
+
+    const deneme = JSON.parse(localStorage.getItem('RecipeDeneme'));
+
+    console.log('deneme', deneme);
+
+    useEffect(() => {
+        const storedRecipes = JSON.parse(localStorage.getItem('RecipeDeneme'));
+    }, []);
+
 
     const filterRecipes = () => {
-        // Filtreleme işlemleri burada yapılır
-        let filteredRecipes = recipes;
 
+        let filteredRecipes = deneme;
+
+        console.log('filter içindeki', deneme);
         if (searchText) {
             filteredRecipes = filteredRecipes.filter(recipe => recipe.name.toLowerCase().includes(searchText.toLowerCase()));
         }
@@ -57,7 +65,35 @@ function Content() {
         }
     };
 
-    const handleEditClick = () => {
+
+    const updateRecipeInLocalStorage = () => {
+        const updatedRecipes = deneme.map((recipe) => {
+            if (recipe.name === editRecipeName) {
+                return {
+                    ...recipe,
+                    content: editRecipeContent,
+                    category: editRecipeCategory,
+                };
+            }
+            return recipe;
+        });
+
+        localStorage.setItem('RecipeDeneme', JSON.stringify(updatedRecipes));
+        setRecipe(updatedRecipes);
+    };
+
+
+    const handleSaveChanges = () => {
+        updateRecipeInLocalStorage();
+        setRecipePopup(false);
+    };
+
+
+
+    const handleEditClick = (recipe) => {
+        setEditRecipeName(recipe.name);
+        setEditRecipeContent(recipe.content);
+        setEditRecipeCategory(recipe.category);
         setRecipePopup(true);
     };
 
@@ -113,10 +149,9 @@ function Content() {
                                         className='icon'
                                     />
                                     <CiEdit
-                                        onClick={handleEditClick}
+                                        onClick={() => handleEditClick(filteredRecipe)}
                                         className='icon'
                                     />
-                                    <MdOutlineAdd className='icon' />
                                     {isAdmin &&
                                         <MdDelete className='deleteIcon' />
                                     }
@@ -132,7 +167,7 @@ function Content() {
                                         ))}
                                     </div>
                                 </div>
-                                <textarea ref={textareRef} />
+                                <input />
                                 <p>{filteredRecipe.content}</p>
                             </div>
                         </div>
@@ -145,11 +180,19 @@ function Content() {
                         <Modal.Title>Edit Recipe</Modal.Title>
                     </Modal.Header>
                     <Modal.Body className='products-popup-container__box'>
-                        <textarea onChange={(e) => setRecipe(e.target.value)} />
+                        <label>Name:</label>
+                        <input type="text" value={editRecipeName} onChange={(e) => setEditRecipeName(e.target.value)} />
+                        <label>Content:</label>
+                        <textarea value={editRecipeContent} onChange={(e) => setEditRecipeContent(e.target.value)} />
+                        <label>Category:</label>
+                        <input type="text" value={editRecipeCategory} onChange={(e) => setEditRecipeCategory(e.target.value)} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setRecipePopup(false)}>
-                            Kapat
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={handleSaveChanges}>
+                            Save Changes
                         </Button>
                     </Modal.Footer>
                 </Modal>
