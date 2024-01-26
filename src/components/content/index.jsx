@@ -8,13 +8,14 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import './index.scss';
+import api from '../../interceptor';
 
 function Content() {
     const [rating, setRating] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
     const [recipe, setRecipe] = useState('');
     const [recipePopup, setRecipePopup] = useState(false);
-    const [isCommenting, setIsCommenting] = useState(false);
+    const [userData, setUserData] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editRecipeName, setEditRecipeName] = useState('');
@@ -48,6 +49,8 @@ function Content() {
 
         return filteredRecipes;
     };
+
+
 
     const handleStarHover = (hoveredStar) => {
         if (rating === 0) {
@@ -102,6 +105,38 @@ function Content() {
             textareRef.current.blur();
         }
     };
+
+
+    const username = (sessionStorage.getItem('userName'));
+
+    console.log('userName', username)
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await api.get('/user_account');
+
+                console.log('response', response)
+                if (response.status === 200) {
+                    setUserData(response.data);
+                    if (username) {
+                        const userRole = userData.find((item) => item.username === username);
+                        console.log('userRole', userRole)
+                        if (userRole.role.name === 'admin') {
+                            setIsAdmin(true);
+                        }
+                    }
+
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Veri alınamadı:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <>

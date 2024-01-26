@@ -1,8 +1,7 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom/dist";
 import HamburgerMenu from "../hamburgerMenu";
-import axios from "axios";
-
 import "./index.scss";
 import Header from "../header";
 import { useSelector } from "react-redux";
@@ -10,43 +9,29 @@ import { useSelector } from "react-redux";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [data, setData] = useState();
   const [errorMessages, setErrorMessages] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
 
-
   const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
-  const handleLogin = async () => {
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
     try {
-      const authResponse = await axios.post(
-        process.env.REACT_APP_API_URL + "authenticate",
-        {
-          username: username.trim(),
-          password: password,
-        }
-      );
-      console.log("authResponse", authResponse);
-      if (authResponse.status === 200) {
-        sessionStorage.setItem("username", username);
-        const token = authResponse.data.token;
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        sessionStorage.setItem("userTokenTry", token);
-
-        navigate('/');
-
-      } else if (authResponse.status === 403) {
-        setErrorMessages(
-          "Unauthorized. Insufficeient permission to access user acoount."
-        );
-      } else {
-        setErrorMessages("Error! Please try again later");
-      }
-    } catch (e) {
-      console.error("Error occured during login: ", errorMessages);
-      setErrorMessages("An unexpected error occured. Please try again later.");
+      const response = await axios.post("https://recipe-share-jelj.onrender.com/authenticate", {
+        username,
+        password,
+      });
+      const token = response.data.token;
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('userName', username);
+      navigate("/");
+    } catch (error) {
+      setErrorMessages("Invalid credentials. Please try again.");
     }
   };
+
+
   return (
     <>
       <Header />
@@ -84,9 +69,7 @@ function Login() {
           </div>
         </div>
       </div>
-      {isHamburger &&
-        <HamburgerMenu />
-      }
+      {isHamburger && <HamburgerMenu />}
     </>
   );
 }

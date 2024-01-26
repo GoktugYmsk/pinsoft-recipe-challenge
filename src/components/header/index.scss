@@ -13,6 +13,10 @@
         gap: 20px;
         right: 40px;
 
+        h3 {
+            cursor: pointer;
+        }
+
         h5 {
             margin-top: 10px;
         }
@@ -29,9 +33,7 @@
 
     .container-header__logoutIcon {
         display: flex;
-        position: absolute;
-        right: 40px;
-        font-size: 35px;
+        font-size: 40px;
         cursor: pointer;
     }
 }
