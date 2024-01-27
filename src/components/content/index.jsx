@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import './index.scss';
 import api from '../../interceptor';
+import { useNavigate } from 'react-router-dom';
 
 function Content() {
     const [rating, setRating] = useState(0);
@@ -21,6 +22,9 @@ function Content() {
     const [editRecipeName, setEditRecipeName] = useState('');
     const [editRecipeContent, setEditRecipeContent] = useState('');
     const [editRecipeCategory, setEditRecipeCategory] = useState('');
+    const [isLogin, setIslogin] = useState(false);
+
+    const navigate = useNavigate();
 
     const textareRef = useRef();
 
@@ -32,6 +36,14 @@ function Content() {
     useEffect(() => {
         const storedRecipes = JSON.parse(localStorage.getItem('RecipeDeneme'));
     }, []);
+
+    const token = sessionStorage.getItem('token');
+
+    useEffect(() => {
+        if (token) {
+            setIslogin(true);
+        }
+    }, [token])
 
 
     const filterRecipes = () => {
@@ -94,16 +106,27 @@ function Content() {
 
 
     const handleEditClick = (recipe) => {
-        setEditRecipeName(recipe.name);
-        setEditRecipeContent(recipe.content);
-        setEditRecipeCategory(recipe.category);
-        setRecipePopup(true);
+        if (isLogin === true) {
+            setEditRecipeName(recipe.name);
+            setEditRecipeContent(recipe.content);
+            setEditRecipeCategory(recipe.category);
+            setRecipePopup(true);
+        }
+        else if (isLogin === false) {
+            navigate('/login');
+        };
     };
 
     const handleCommentClick = () => {
-        if (textareRef.current) {
-            textareRef.current.blur();
+        if (isLogin === true) {
+            if (textareRef.current) {
+                textareRef.current.blur();
+            }
         }
+        else if (isLogin === false) {
+            navigate('/login');
+        };
+
     };
 
 
