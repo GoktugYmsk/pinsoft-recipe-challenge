@@ -45,7 +45,11 @@ function HamburgerMenu() {
         dispatch(setIsHamburger(false));
         navigate('/login');
     };
-
+    
+    const handleSignUp = () => {
+        dispatch(setIsHamburger(false));
+        navigate('/');
+    };
     const isToken = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -62,7 +66,7 @@ function HamburgerMenu() {
     return (
         <div className={`container-hamburger ${isHamburger ? 'hamburgerActive' : ''}`} >
             <div className='container-hamburger__top' >
-                <h3>Üye Ol</h3>
+                <h3 onClick={handleSignUp} >Üye Ol</h3>
                 <h3 onClick={handleLogin} >Giriş yap</h3>
                 {isLogin &&
                     <h3 onClick={handleAddClick} >Tarif ekle</h3>
