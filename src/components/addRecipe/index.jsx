@@ -35,8 +35,7 @@ function AddRecipe() {
                     <div className='select' >
                         <select
                             value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
+                            onChange={(e) => setCategory(e.target.value)}>
                             <option value='' disabled>Kategori</option>
                             <option value='Eletronik'>Tatlı</option>
                             <option value='Giyim'>Çorba</option>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaInstagram, FaFacebook, FaTwitterSquare, FaYoutube } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { setIsHamburger } from '../configure';
 import './index.scss'
 
 function HamburgerMenu() {
+    const [isLogin, setIslogin] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -41,19 +42,35 @@ function HamburgerMenu() {
     };
 
     const handleLogin = () => {
+        dispatch(setIsHamburger(false));
         navigate('/login');
     };
 
+    const isToken = sessionStorage.getItem('token');
+
+    useEffect(() => {
+        if (isToken) {
+            setIslogin(true);
+        }
+    }, [isToken])
+
+    const handleMainClick = () => {
+        dispatch(setIsHamburger(false));
+        navigate('/');
+    };
 
     return (
         <div className={`container-hamburger ${isHamburger ? 'hamburgerActive' : ''}`} >
             <div className='container-hamburger__top' >
                 <h3>Üye Ol</h3>
                 <h3 onClick={handleLogin} >Giriş yap</h3>
-                <h3 onClick={handleAddClick} >Tarif ekle</h3>
+                {isLogin &&
+                    <h3 onClick={handleAddClick} >Tarif ekle</h3>
+                }
                 <h3>Şikayet</h3>
                 <h3>İletişim</h3>
                 <h3>Hakkımızda</h3>
+                <h3 onClick={handleMainClick} >Ana Sayfa</h3>
             </div>
             <div className='socialIconsGroup' >
                 <FaInstagram style={{ color: 'white' }} className='socialIcon' />

@@ -18,7 +18,6 @@ function Header() {
     const handleHamburgerClick = () => {
         dispatch(setIsHamburger(!isHamburger));
     };
-
     const isToken = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -34,6 +33,7 @@ function Header() {
     };
 
     const handleLoginClick = () => {
+        dispatch(setIsHamburger(false));
         navigate('/login');
     };
 
@@ -54,6 +54,7 @@ function Header() {
                     <div className='container-header__login' >
                         <FaRegUser className='container-header__loginIcon' />
                         <h3 onClick={handleLoginClick} >Giriş Yap</h3>
+                        <GiHamburgerMenu onClick={handleHamburgerClick} className='container-header__hamburger' />
                     </div>
                 )}
             </div>
