@@ -28,15 +28,25 @@ function AddRecipe() {
     const handleAddRecipe = () => {
         const fetchData = async () => {
             try {
+                let categoryId;
+                switch (category) {
+                    case 'Tatlı':
+                        categoryId = 1;
+                        break;
+                    case 'Çorba':
+                        categoryId = 2;
+                        break;
+                    case 'Ana Yemek':
+                        categoryId = 3;
+                        break;
+                }
+
                 const newRecipe = {
-                    id: 0,
                     name: recipeName,
                     explanation: prepare,
-                    category: {
-                        id: 1,
-                        name: category
-                    }
+                    categoryId: categoryId,
                 };
+
                 const sendRecipe = await api.post('/recipe', newRecipe);
                 console.log('Tarif başarıyla eklendi:', sendRecipe);
             } catch (error) {
@@ -46,7 +56,6 @@ function AddRecipe() {
 
         fetchData();
     };
-
 
 
     return (

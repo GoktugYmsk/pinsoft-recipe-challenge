@@ -8,6 +8,8 @@ import './index.scss'
 function HamburgerMenu() {
     const [isLogin, setIslogin] = useState(false);
 
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
@@ -66,8 +68,12 @@ function HamburgerMenu() {
     return (
         <div className={`container-hamburger ${isHamburger ? 'hamburgerActive' : ''}`} >
             <div className='container-hamburger__top' >
-                <h3 onClick={handleSignUp} >Üye Ol</h3>
-                <h3 onClick={handleLogin} >Giriş yap</h3>
+                {!isLogin &&
+                    <>
+                        <h3 onClick={handleSignUp} >Üye Ol</h3>
+                        <h3 onClick={handleLogin} >Giriş yap</h3>
+                    </>
+                }
                 {isLogin &&
                     <h3 onClick={handleAddClick} >Tarif ekle</h3>
                 }
