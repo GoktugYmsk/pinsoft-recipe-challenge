@@ -45,10 +45,10 @@ function HamburgerMenu() {
         dispatch(setIsHamburger(false));
         navigate('/login');
     };
-    
+
     const handleSignUp = () => {
         dispatch(setIsHamburger(false));
-        navigate('/');
+        navigate('/signup');
     };
     const isToken = sessionStorage.getItem('token');
 

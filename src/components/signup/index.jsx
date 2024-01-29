@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import HamburgerMenu from "../hamburgerMenu";
+
 import "./index.scss";
 import Header from "../header";
 
@@ -85,6 +87,7 @@ function Signup() {
           </div>
         </div>
       </div>
+      <HamburgerMenu />
     </>
   );
 }

@@ -31,7 +31,6 @@ function Content() {
 
     const deneme = JSON.parse(localStorage.getItem('RecipeDeneme'));
 
-    console.log('deneme', deneme);
 
     useEffect(() => {
         const storedRecipes = JSON.parse(localStorage.getItem('RecipeDeneme'));
@@ -102,8 +101,6 @@ function Content() {
         updateRecipeInLocalStorage();
         setRecipePopup(false);
     };
-
-
 
     const handleEditClick = (recipe) => {
         if (isLogin === true) {
@@ -200,7 +197,6 @@ function Content() {
                             <h2>{filteredRecipe.name}</h2>
                             <div className='container-content__recipe__altBox'>
                                 <img src='https://cdn.yemek.com/mnresize/940/940/uploads/2023/10/saray-koftesi-yemekcom.jpg' />
-
                                 <div className='container-content__recipe__altBox__icons'>
                                     <FaRegComment
                                         onClick={handleCommentClick}
@@ -225,7 +221,7 @@ function Content() {
                                         ))}
                                     </div>
                                 </div>
-                                <input />
+                                <input placeholder='Yorum yap' />
                                 <p>{filteredRecipe.content}</p>
                             </div>
                         </div>

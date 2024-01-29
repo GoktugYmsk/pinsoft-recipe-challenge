@@ -23,7 +23,7 @@ function Layout() {
         <>
             <div className={`container-layout ${isHamburger ? 'opacityActive' : ''}`} >
                 <Row>
-                    <Col md={12} >
+                    <Col xs={12} md={12} >
                         <Header />
                     </Col>
                 </Row>
