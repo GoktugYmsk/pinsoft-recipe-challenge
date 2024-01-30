@@ -24,6 +24,15 @@ function Content() {
     const [editRecipeCategory, setEditRecipeCategory] = useState('');
     const [isLogin, setIslogin] = useState(false);
 
+
+    /*
+    
+    
+    UPDATE İŞLEMLERİNE BAK
+    
+    
+    */
+
     const navigate = useNavigate();
     const textareRef = useRef();
 
@@ -35,24 +44,21 @@ function Content() {
         }
     }, [token])
 
-    useEffect(() => {
-        console.log('recipe', recipe)
-    }, [recipe]);
-
 
     const filterRecipes = () => {
-        let filteredRecipes = [...recipe]; // Copy the original recipe array
+        let filteredRecipes = [...recipe];
 
         if (searchText) {
             filteredRecipes = filteredRecipes.filter(recipe => recipe.name.toLowerCase().includes(searchText.toLowerCase()));
         }
 
         if (selectedCategory) {
-            filteredRecipes = filteredRecipes.filter(recipe => recipe.category === selectedCategory);
+            filteredRecipes = filteredRecipes.filter(recipe => recipe.category.name === selectedCategory);
         }
 
         return filteredRecipes;
     };
+
 
     const handleStarHover = (hoveredStar) => {
         if (rating === 0) {
@@ -124,7 +130,6 @@ function Content() {
             try {
                 const getAllRecipe = await api.get('/recipe');
                 if (getAllRecipe.status === 200) {
-                    console.log('getAllRecipe', getAllRecipe);
                     setRecipe(getAllRecipe.data);
                 };
             }
@@ -179,6 +184,11 @@ function Content() {
         fetchData();
     }, [username]);
 
+
+    useEffect(() => {
+        filterRecipes();
+    }, [selectedCategory]);
+
     return (
         <>
             <div className='container-content'>
@@ -192,21 +202,27 @@ function Content() {
                             <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
                                 <Dropdown.Item
                                     className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Tatlılar')}
+                                    onClick={() => setSelectedCategory('Kahvaltı')}
                                 >
-                                    Tatlılar
+                                    Kahvaltı
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                     className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Çorbalar')}
+                                    onClick={() => setSelectedCategory('Ana Yemek')}
                                 >
-                                    Çorbalar
+                                    Ana Yemek
                                 </Dropdown.Item>
                                 <Dropdown.Item
                                     className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Ana Yemekler')}
+                                    onClick={() => setSelectedCategory('Tatlı')}
                                 >
-                                    Ana Yemekler
+                                    Tatlı
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    className='topContent__filter_-dropdownMenu__hover'
+                                    onClick={() => setSelectedCategory('Salata')}
+                                >
+                                    Salata
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
