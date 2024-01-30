@@ -16,7 +16,7 @@ function Content() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [recipe, setRecipe] = useState('');
     const [recipePopup, setRecipePopup] = useState(false);
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState();
     const [searchText, setSearchText] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [editRecipeName, setEditRecipeName] = useState('');
@@ -31,11 +31,6 @@ function Content() {
 
     const deneme = JSON.parse(localStorage.getItem('RecipeDeneme'));
 
-
-    useEffect(() => {
-        const storedRecipes = JSON.parse(localStorage.getItem('RecipeDeneme'));
-    }, []);
-
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -48,8 +43,6 @@ function Content() {
     const filterRecipes = () => {
 
         let filteredRecipes = deneme;
-
-        console.log('filter içindeki', deneme);
         if (searchText) {
             filteredRecipes = filteredRecipes.filter(recipe => recipe.name.toLowerCase().includes(searchText.toLowerCase()));
         }
@@ -129,34 +122,36 @@ function Content() {
 
     const username = (sessionStorage.getItem('userName'));
 
-    console.log('userName', username)
+
+
+    // useEffect(() => {
+    //     console.log('userDatauserData', userData)
+    // }, [userData]);
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await api.get('/user_account');
+                setUserData(response.data);
 
-                console.log('response', response)
-                if (response.status === 200) {
-                    setUserData(response.data);
-                    if (username) {
-                        const userRole = userData.find((item) => item.username === username);
-                        console.log('userRole', userRole)
-                        if (userRole.role.name === 'admin') {
-                            setIsAdmin(true);
-                        }
+                if (response.status === 200 && username) {
+                    const userRole = response.data.find((item) => item.username === username);
+                    if (userRole.role.name === "admin") {
+                        setIsAdmin(true);
                     }
-
-                } else {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             } catch (error) {
                 console.error('Veri alınamadı:', error);
             }
         };
+
         fetchData();
-    }, []);
+    }, [username]);
+
+    useEffect(() => {
+        console.log('USERDATA', userData);
+    }, [userData]);
 
     return (
         <>

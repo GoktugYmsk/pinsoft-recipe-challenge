@@ -31,13 +31,13 @@ function AddRecipe() {
                 let categoryId;
                 switch (category) {
                     case 'Tatlı':
-                        categoryId = 1;
+                        categoryId = 100;
                         break;
                     case 'Çorba':
-                        categoryId = 2;
+                        categoryId = 101;
                         break;
                     case 'Ana Yemek':
-                        categoryId = 3;
+                        categoryId = 102;
                         break;
                 }
 

@@ -6,43 +6,48 @@ import HamburgerMenu from "../hamburgerMenu";
 
 import "./index.scss";
 import Header from "../header";
+import { useSelector } from "react-redux";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
+
   const handleSignUp = async () => {
+
+    console.log('username', username)
+    console.log('email', email)
+    console.log('password', password)
+
     try {
-      const registerResponse = await axios.post(
-        process.env.REACT_APP_API_URL + "register",
+      const response = await axios.post(
+        "https://recipe-share-jelj.onrender.com/register",
         {
-          username: username.trim(),
-          password: password,
+          username: username,
           email: email,
+          password: password,
         }
       );
-      console.log("registerResponse", registerResponse);
-      if (registerResponse.status === 200) {
-        sessionStorage.setItem("username", username);
-        const token = registerResponse.data.token;
-        axios.defaults.headers.common["Register"] = `Bearer ${token}`;
-        sessionStorage.setItem("userTokenTry", token);
-      } else if (registerResponse === 403) {
-        console.log(
-          "Unauthorized. Insufficient permission to access user acoount."
-        );
+      if (response.status === 200) {
+        navigate("/login");
       } else {
-        console.log("Error - unknown");
       }
     } catch (error) {
-      console.error("Error occured during signup: ", error);
+      console.error('An error occurred during signup:', error);
+
     }
+
   };
+
+
+
   return (
     <>
       <Header />
-      <div className="app">
+      <div className={`app ${isHamburger ? 'opacityActive' : 'app'}`}>
         <div className="login-form">
           <div className="title">Giriş</div>
           <div className="form">
@@ -87,7 +92,9 @@ function Signup() {
           </div>
         </div>
       </div>
-      <HamburgerMenu />
+      {isHamburger &&
+        <HamburgerMenu />
+      }
     </>
   );
 }
