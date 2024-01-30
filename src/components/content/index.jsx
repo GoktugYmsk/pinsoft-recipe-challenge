@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 function Content() {
     const [rating, setRating] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [recipe, setRecipe] = useState('');
+    const [recipe, setRecipe] = useState([]);
     const [recipePopup, setRecipePopup] = useState(false);
     const [userData, setUserData] = useState();
     const [searchText, setSearchText] = useState('');
@@ -25,11 +25,7 @@ function Content() {
     const [isLogin, setIslogin] = useState(false);
 
     const navigate = useNavigate();
-
     const textareRef = useRef();
-
-
-    const deneme = JSON.parse(localStorage.getItem('RecipeDeneme'));
 
     const token = sessionStorage.getItem('token');
 
@@ -39,10 +35,14 @@ function Content() {
         }
     }, [token])
 
+    useEffect(() => {
+        console.log('recipe', recipe)
+    }, [recipe]);
+
 
     const filterRecipes = () => {
+        let filteredRecipes = [...recipe]; // Copy the original recipe array
 
-        let filteredRecipes = deneme;
         if (searchText) {
             filteredRecipes = filteredRecipes.filter(recipe => recipe.name.toLowerCase().includes(searchText.toLowerCase()));
         }
@@ -53,8 +53,6 @@ function Content() {
 
         return filteredRecipes;
     };
-
-
 
     const handleStarHover = (hoveredStar) => {
         if (rating === 0) {
@@ -72,9 +70,8 @@ function Content() {
         }
     };
 
-
     const updateRecipeInLocalStorage = () => {
-        const updatedRecipes = deneme.map((recipe) => {
+        const updatedRecipes = recipe.map((recipe) => {
             if (recipe.name === editRecipeName) {
                 return {
                     ...recipe,
@@ -84,8 +81,6 @@ function Content() {
             }
             return recipe;
         });
-
-        localStorage.setItem('RecipeDeneme', JSON.stringify(updatedRecipes));
         setRecipe(updatedRecipes);
     };
 
@@ -123,10 +118,45 @@ function Content() {
     const username = (sessionStorage.getItem('userName'));
 
 
+    useEffect(() => {
 
-    // useEffect(() => {
-    //     console.log('userDatauserData', userData)
-    // }, [userData]);
+        const fecthData = async () => {
+            try {
+                const getAllRecipe = await api.get('/recipe');
+                if (getAllRecipe.status === 200) {
+                    console.log('getAllRecipe', getAllRecipe);
+                    setRecipe(getAllRecipe.data);
+                };
+            }
+            catch (error) {
+                console.log(error)
+            }
+        };
+
+        fecthData();
+    }, []);
+
+
+    const decodeBase64Image = (base64) => {
+        try {
+            const base64ImageData = base64.split(",")[1];
+            const binaryString = atob(base64ImageData);
+
+            const byteNumbers = new Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                byteNumbers[i] = binaryString.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/jpeg' });
+            const dataUrl = URL.createObjectURL(blob);
+
+            return dataUrl;
+        } catch (error) {
+            console.error('Base64 decoding error:', error);
+            return '';
+        }
+    };
 
 
     useEffect(() => {
@@ -148,10 +178,6 @@ function Content() {
 
         fetchData();
     }, [username]);
-
-    useEffect(() => {
-        console.log('USERDATA', userData);
-    }, [userData]);
 
     return (
         <>
@@ -191,7 +217,7 @@ function Content() {
                         <div key={index} className='container-content__recipe'>
                             <h2>{filteredRecipe.name}</h2>
                             <div className='container-content__recipe__altBox'>
-                                <img src='https://cdn.yemek.com/mnresize/940/940/uploads/2023/10/saray-koftesi-yemekcom.jpg' />
+                                <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
                                 <div className='container-content__recipe__altBox__icons'>
                                     <FaRegComment
                                         onClick={handleCommentClick}

@@ -35,7 +35,7 @@ function Login() {
   return (
     <>
       <Header />
-      <div className="app">
+      <div className={`app ${isHamburger ? 'opacityActive' : ''} `}>
         <div className="login-form">
           <div className="title">Giriş</div>
           <div className="form">

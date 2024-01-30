@@ -16,7 +16,8 @@ function Signup() {
 
   const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (event) => {
+    event.preventDefault();
 
     console.log('username', username)
     console.log('email', email)
@@ -37,9 +38,7 @@ function Signup() {
       }
     } catch (error) {
       console.error('An error occurred during signup:', error);
-
     }
-
   };
 
 

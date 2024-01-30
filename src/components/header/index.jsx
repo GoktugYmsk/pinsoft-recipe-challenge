@@ -30,6 +30,7 @@ function Header() {
     const handleLogoutClick = () => {
         sessionStorage.removeItem('token');
         window.location.reload();
+        navigate('/')
     };
 
     const handleLoginClick = () => {
@@ -41,7 +42,7 @@ function Header() {
 
     return (
         <>
-            <div className='container-header'>
+            <div className={`container-header ${isHamburger ? 'opacityActive' : ''} `}>
                 <h1>PİNSOFT RECİPE</h1>
                 {islogin ? (
                     <div className='container-header__login' >
