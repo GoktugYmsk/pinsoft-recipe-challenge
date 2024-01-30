@@ -136,6 +136,13 @@
     }
 }
 
+.toast-container {
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    background: #a2e47c;
+}
+
 .products-popup-container {
     display: flex;
     flex-direction: column;

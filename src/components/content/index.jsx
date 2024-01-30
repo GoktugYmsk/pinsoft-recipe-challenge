@@ -7,9 +7,12 @@ import { MdDelete } from "react-icons/md";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Toast from 'react-bootstrap/Toast';
 import './index.scss';
 import api from '../../interceptor';
 import { useNavigate } from 'react-router-dom';
+import DeletePopup from './deletePopup';
+import { useSelector } from 'react-redux';
 
 function Content() {
     const [rating, setRating] = useState(0);
@@ -23,7 +26,12 @@ function Content() {
     const [editRecipeContent, setEditRecipeContent] = useState('');
     const [editRecipeCategory, setEditRecipeCategory] = useState('');
     const [isLogin, setIslogin] = useState(false);
+    const [deletePopup, setDeletePopup] = useState(false);
+    const [deleteRecipeId, setDeleteRecipeId] = useState();
+    const [toastActive, setToastActive] = useState(false);
 
+
+    const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
 
     /*
     
@@ -37,13 +45,7 @@ function Content() {
     const textareRef = useRef();
 
     const token = sessionStorage.getItem('token');
-
-    useEffect(() => {
-        if (token) {
-            setIslogin(true);
-        }
-    }, [token])
-
+    const username = sessionStorage.getItem('userName');
 
     const filterRecipes = () => {
         let filteredRecipes = [...recipe];
@@ -90,7 +92,6 @@ function Content() {
         setRecipe(updatedRecipes);
     };
 
-
     const handleSaveChanges = () => {
         updateRecipeInLocalStorage();
         setRecipePopup(false);
@@ -102,6 +103,7 @@ function Content() {
             setEditRecipeContent(recipe.content);
             setEditRecipeCategory(recipe.category);
             setRecipePopup(true);
+
         }
         else if (isLogin === false) {
             navigate('/login');
@@ -119,28 +121,6 @@ function Content() {
         };
 
     };
-
-
-    const username = (sessionStorage.getItem('userName'));
-
-
-    useEffect(() => {
-
-        const fecthData = async () => {
-            try {
-                const getAllRecipe = await api.get('/recipe');
-                if (getAllRecipe.status === 200) {
-                    setRecipe(getAllRecipe.data);
-                };
-            }
-            catch (error) {
-                console.log(error)
-            }
-        };
-
-        fecthData();
-    }, []);
-
 
     const decodeBase64Image = (base64) => {
         try {
@@ -163,7 +143,6 @@ function Content() {
         }
     };
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -184,10 +163,38 @@ function Content() {
         fetchData();
     }, [username]);
 
+    useEffect(() => {
+
+        const fecthData = async () => {
+            try {
+                const getAllRecipe = await api.get('/recipe');
+                if (getAllRecipe.status === 200) {
+                    setRecipe(getAllRecipe.data);
+                };
+            }
+            catch (error) {
+                console.log(error)
+            }
+        };
+
+        fecthData();
+    }, []);
 
     useEffect(() => {
         filterRecipes();
     }, [selectedCategory]);
+
+    useEffect(() => {
+        if (token) {
+            setIslogin(true);
+        }
+    }, [token])
+
+    const handleDeleteClick = async (recipeId) => {
+        console.log('recipeId', recipeId);
+        setDeleteRecipeId(recipeId)
+        setDeletePopup(true);
+    };
 
     return (
         <>
@@ -244,7 +251,7 @@ function Content() {
                                         className='icon'
                                     />
                                     {isAdmin &&
-                                        <MdDelete className='deleteIcon' />
+                                        <MdDelete onClick={() => handleDeleteClick(filteredRecipe.id)} className='deleteIcon' />
                                     }
                                     <div className='point'>
                                         {[1, 2, 3, 4, 5].map((star) => (
@@ -287,6 +294,16 @@ function Content() {
                         </Button>
                     </Modal.Footer>
                 </Modal>
+            }
+            {toastActive && (
+                <div className="toast-container">
+                    <Toast onClose={() => setToastActive(false)} show={toastActive} autohide>
+                        <Toast.Body>{toastMessage}</Toast.Body>
+                    </Toast>
+                </div>
+            )}
+            {deletePopup &&
+                <DeletePopup deleteRecipeId={deleteRecipeId} setDeletePopup={setDeletePopup} setToastActive={setToastActive} />
             }
         </>
     );
