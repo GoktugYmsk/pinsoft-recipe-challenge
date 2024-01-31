@@ -1,6 +1,99 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react';
+import { FaRegComment, FaStar } from 'react-icons/fa';
+import { CiEdit } from 'react-icons/ci';
+import { MdDelete } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { IoMdSend } from 'react-icons/io';
+import { MdOutlinePhotoLibrary } from 'react-icons/md';
+import api from '../../../interceptor';
 
-function RecipePart() {
+function RecipePart({
+    filterRecipes,
+    decodeBase64Image,
+    handleEditClick,
+    handleDeleteClick,
+    handleStarHover,
+    handleStarLeave,
+    setRating,
+    isAdmin,
+    rating,
+    isLogin,
+}) {
+    const [inputStates, setInputStates] = useState(filterRecipes().map(() => false));
+    const inputRefs = useRef(filterRecipes().map(() => React.createRef()));
+    const [commentMessage, setCommentMessage] = useState('');
+    const [photo, setPhoto] = useState('');
+    const [openFile, setOpenFile] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleCommentClick = (index) => {
+        if (isLogin === true) {
+            const newInputStates = [...inputStates];
+            newInputStates[index] = true;
+            setInputStates(newInputStates);
+
+            if (inputRefs.current[index].current) {
+                inputRefs.current[index].current.focus();
+            }
+        } else if (isLogin === false) {
+            navigate('/login');
+        }
+    };
+
+    const handleInputBlur = (index) => {
+        const newInputStates = [...inputStates];
+        newInputStates[index] = false;
+        setInputStates(newInputStates);
+    };
+
+    const handleStarClick = (clickedStar) => {
+        setRating(clickedStar);
+    };
+
+    const handleSendCommentClick = (recipeId) => {
+        const fetchData = async () => {
+            try {
+                const newRecipe = {
+                    comment: commentMessage,
+                    base64img: photo,
+                    rating: rating,
+                    // userId: userId, 
+                    recipeId: recipeId,
+                };
+
+                const sendRecipe = await api.post('/reciperating', newRecipe);
+                if (sendRecipe.status === 200) {
+                    console.log('veriler Gönderildi');
+                }
+            } catch (error) {
+                console.error('Error sending recipe:', error);
+            }
+        };
+        fetchData();
+    };
+
+    useEffect(() => {
+        if (openFile === true) {
+            handleFileChange();
+        }
+    }, [openFile]);
+
+    const handleFileChange = (e) => {
+        const file = e?.target?.files?.[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                const base64Image = reader.result;
+                setPhoto(base64Image);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
             {filterRecipes().map((filteredRecipe, index) => (
@@ -9,17 +102,9 @@ function RecipePart() {
                     <div className='container-content__recipe__altBox'>
                         <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
                         <div className='container-content__recipe__altBox__icons'>
-                            <FaRegComment
-                                onClick={handleCommentClick}
-                                className='icon'
-                            />
-                            <CiEdit
-                                onClick={() => handleEditClick(filteredRecipe)}
-                                className='icon'
-                            />
-                            {isAdmin &&
-                                <MdDelete onClick={() => handleDeleteClick(filteredRecipe.id)} className='deleteIcon' />
-                            }
+                            <FaRegComment onClick={() => handleCommentClick(index)} className='icon' />
+                            <CiEdit onClick={() => handleEditClick(filteredRecipe)} className='icon' />
+                            {isAdmin && <MdDelete onClick={() => handleDeleteClick(filteredRecipe.id)} className='deleteIcon' />}
                             <div className='point'>
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <FaStar
@@ -32,13 +117,32 @@ function RecipePart() {
                                 ))}
                             </div>
                         </div>
-                        <input placeholder='Yorum yap' />
+                        <div className='container-content__recipe__altBox__comment-area'>
+                            <input
+                                type='text'
+                                placeholder='Yorum yap'
+                                ref={inputRefs.current[index]}
+                                onBlur={() => handleInputBlur(index)}
+                                onChange={(e) => setCommentMessage(e.target.value)}
+                                className={inputStates[index] ? 'activeInput' : ''}
+                            />
+                            <IoMdSend onClick={() => handleSendCommentClick(filteredRecipe.id)} className='sendCommentIcon' />
+                            <label htmlFor='file-input' style={{ display: 'flex' }}>
+                                <input
+                                    id='file-input'
+                                    type='file'
+                                    style={{ display: 'none' }}
+                                    onChange={(e) => handleFileChange(e)}
+                                />
+                                <MdOutlinePhotoLibrary onClick={() => setOpenFile(true)} className='recipeCommentPhotoIcon' />
+                            </label>
+                        </div>
                         <p>{filteredRecipe.content}</p>
                     </div>
                 </div>
             ))}
         </>
-    )
+    );
 }
 
-export default RecipePart
+export default RecipePart;
