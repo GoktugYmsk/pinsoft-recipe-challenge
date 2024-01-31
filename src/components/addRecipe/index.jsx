@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Header from '../header';
 import HamburgerMenu from '../hamburgerMenu';
 import Button from 'react-bootstrap/Button';
 import './index.scss';
 import api from '../../interceptor';
+import { setToastMessage } from '../configure';
+import { setIsToastActive } from '../configure';
 
 function AddRecipe() {
     const [category, setCategory] = useState('Tatlı');
@@ -17,6 +19,8 @@ function AddRecipe() {
     const navigate = useNavigate();
 
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log('isHamburger', isHamburger);
@@ -60,6 +64,8 @@ function AddRecipe() {
                 const sendRecipe = await api.post('/recipe', newRecipe);
 
                 if (sendRecipe.status === 200) {
+                    dispatch(setToastMessage('Tarif Başarıyla Eklendi'));
+                    dispatch(setIsToastActive(true));
                     navigate('/');
                 }
                 console.log('Tarif başarıyla eklendi:', sendRecipe);

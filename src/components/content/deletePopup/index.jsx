@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import api from '../../../interceptor';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToastMessage } from '../../configure';
+import { setIsToastActive } from '../../configure';
 
 
 function DeletePopup({ deleteRecipeId, setDeletePopup, setToastActive }) {
@@ -16,7 +17,7 @@ function DeletePopup({ deleteRecipeId, setDeletePopup, setToastActive }) {
             const deleteRecipe = await api.delete(`/recipe/${deleteRecipeId}`);
             if (deleteRecipe.status === 200) {
                 dispatch(setToastMessage('Tarif başarıyla silindi'));
-                setToastActive(true);
+                dispatch(setIsToastActive(true));
                 setDeletePopup(false);
                 setInterval(() => {
                     window.location.reload();

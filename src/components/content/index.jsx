@@ -4,15 +4,15 @@ import { CiEdit } from 'react-icons/ci';
 import { MdOutlineAdd } from 'react-icons/md';
 import { FaStar } from 'react-icons/fa';
 import { MdDelete } from "react-icons/md";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Toast from 'react-bootstrap/Toast';
 import './index.scss';
 import api from '../../interceptor';
 import { useNavigate } from 'react-router-dom';
 import DeletePopup from './deletePopup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsToastActive } from '../configure';
+import UpdatePopup from './updatePopup';
 
 function Content() {
     const [rating, setRating] = useState(0);
@@ -28,10 +28,9 @@ function Content() {
     const [isLogin, setIslogin] = useState(false);
     const [deletePopup, setDeletePopup] = useState(false);
     const [deleteRecipeId, setDeleteRecipeId] = useState();
-    const [toastActive, setToastActive] = useState(false);
-
 
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
+    const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
     /*
     
@@ -43,6 +42,7 @@ function Content() {
 
     const navigate = useNavigate();
     const textareRef = useRef();
+    const dispatch = useDispatch();
 
     const token = sessionStorage.getItem('token');
     const username = sessionStorage.getItem('userName');
@@ -236,74 +236,27 @@ function Content() {
                     </div>
                 </div>
                 <div className='altContent'>
-                    {filterRecipes().map((filteredRecipe, index) => (
-                        <div key={index} className='container-content__recipe'>
-                            <h2>{filteredRecipe.name}</h2>
-                            <div className='container-content__recipe__altBox'>
-                                <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
-                                <div className='container-content__recipe__altBox__icons'>
-                                    <FaRegComment
-                                        onClick={handleCommentClick}
-                                        className='icon'
-                                    />
-                                    <CiEdit
-                                        onClick={() => handleEditClick(filteredRecipe)}
-                                        className='icon'
-                                    />
-                                    {isAdmin &&
-                                        <MdDelete onClick={() => handleDeleteClick(filteredRecipe.id)} className='deleteIcon' />
-                                    }
-                                    <div className='point'>
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <FaStar
-                                                key={star}
-                                                className={`icon ${star <= rating ? 'ratingYellow' : 'ratingGrey'}`}
-                                                onMouseEnter={() => handleStarHover(star)}
-                                                onMouseLeave={handleStarLeave}
-                                                onClick={() => handleStarClick(star)}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                                <input placeholder='Yorum yap' />
-                                <p>{filteredRecipe.content}</p>
-                            </div>
-                        </div>
-                    ))}
+
                 </div>
             </div>
-            {recipePopup &&
-                <Modal className='products-popup-container' show={true} onHide={() => setRecipePopup(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Recipe</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className='products-popup-container__box'>
-                        <h3>Name:</h3>
-                        <input type="text" value={editRecipeName} onChange={(e) => setEditRecipeName(e.target.value)} />
-                        <h3>Content:</h3>
-                        <textarea value={editRecipeContent} onChange={(e) => setEditRecipeContent(e.target.value)} />
-                        <h3>Category:</h3>
-                        <input type="text" value={editRecipeCategory} onChange={(e) => setEditRecipeCategory(e.target.value)} />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setRecipePopup(false)}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={handleSaveChanges}>
-                            Save Changes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            }
-            {toastActive && (
+            {recipePopup && <UpdatePopup setRecipePopup={setRecipePopup}
+                setEditRecipeName={setEditRecipeName}
+                setEditRecipeContent={setEditRecipeContent}
+                setEditRecipeCategory={setEditRecipeCategory}
+                handleSaveChanges={handleSaveChanges}
+                editRecipeName={editRecipeName}
+                editRecipeContent={editRecipeContent}
+                editRecipeCategory={editRecipeCategory}
+            />}
+            {isToastACtive && (
                 <div className="toast-container">
-                    <Toast onClose={() => setToastActive(false)} show={toastActive} autohide>
+                    <Toast onClose={() => dispatch(setIsToastActive(false))} show={isToastACtive} autohide>
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>
                 </div>
             )}
             {deletePopup &&
-                <DeletePopup deleteRecipeId={deleteRecipeId} setDeletePopup={setDeletePopup} setToastActive={setToastActive} />
+                <DeletePopup deleteRecipeId={deleteRecipeId} setDeletePopup={setDeletePopup} />
             }
         </>
     );

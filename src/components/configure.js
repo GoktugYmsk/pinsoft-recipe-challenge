@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     isHamburger: false,
     toastMessage: '',
+    isToastACtive: false,
 }
 
 export const configure = createSlice({
@@ -15,9 +16,12 @@ export const configure = createSlice({
         setToastMessage: (state, action) => {
             state.toastMessage = action.payload;
         },
+        setIsToastActive: (state, action) => {
+            state.isToastACtive = action.payload;
+        },
     }
 })
 
-export const { setIsHamburger, setToastMessage } = configure.actions
+export const { setIsHamburger, setToastMessage, setIsToastActive } = configure.actions
 
 export default configure.reducer
