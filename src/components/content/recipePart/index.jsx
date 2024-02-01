@@ -24,6 +24,11 @@ function RecipePart({
     const [commentMessage, setCommentMessage] = useState('');
     const [photo, setPhoto] = useState('');
     const [openFile, setOpenFile] = useState(false);
+    const [recipeRaitng, setRecipeRating] = useState();
+
+    const getUserId = sessionStorage.getItem('userId');
+
+    console.log('GETUSERID', getUserId);
 
     const navigate = useNavigate();
 
@@ -48,6 +53,7 @@ function RecipePart({
     };
 
     const handleStarClick = (clickedStar) => {
+        console.log('clickedStar', clickedStar);
         setRating(clickedStar);
     };
 
@@ -58,7 +64,7 @@ function RecipePart({
                     comment: commentMessage,
                     base64img: photo,
                     rating: rating,
-                    // userId: userId, 
+                    userId: getUserId,
                     recipeId: recipeId,
                 };
 
@@ -93,6 +99,22 @@ function RecipePart({
             reader.readAsDataURL(file);
         }
     };
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await api.get('/');
+    //             setRecipeRating(response.data);
+    //             console.log('responsesetRecipeRatingsetRecipeRating', response);
+    //         } catch (error) {
+    //             console.error('Veri alınamadı:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+
+
 
     return (
         <>

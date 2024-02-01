@@ -76,7 +76,7 @@
             }
 
             input {
-                width: 100%;
+                width: 90%;
                 border-radius: 10px;
                 padding-top: 2px;
                 padding-left: 5px;
@@ -130,11 +130,36 @@
                     }
                 }
 
+                .container-content__recipe__altBox__comment-area {
+                    display: flex;
+                    align-content: center;
+                    justify-content: center;
+                    width: 100%;
+
+                    .sendCommentIcon {
+                        position: relative;
+                        bottom: 3px;
+                        font-size: 30px;
+                        color: rgb(251, 126, 59);
+                        cursor: pointer;
+                    }
+
+                    .recipeCommentPhotoIcon {
+                        position: relative;
+                        bottom: 3px;
+                        font-size: 30px;
+                        color: rgb(251, 126, 59);
+                        cursor: pointer;
+                    }
+                }
+
 
             }
         }
     }
 }
+
+
 
 .toast-container {
     position: absolute;

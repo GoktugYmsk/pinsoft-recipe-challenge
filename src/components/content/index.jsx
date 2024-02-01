@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaRegComment } from 'react-icons/fa';
-import { CiEdit } from 'react-icons/ci';
-import { MdOutlineAdd } from 'react-icons/md';
-import { FaStar } from 'react-icons/fa';
-import { MdDelete } from "react-icons/md";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Toast from 'react-bootstrap/Toast';
+import { MdOutlineAdd } from 'react-icons/md';
 import './index.scss';
 import api from '../../interceptor';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +9,7 @@ import DeletePopup from './deletePopup';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsToastActive } from '../configure';
 import UpdatePopup from './updatePopup';
+import RecipePart from './recipePart';
 
 function Content() {
     const [rating, setRating] = useState(0);
@@ -68,9 +65,7 @@ function Content() {
         }
     };
 
-    const handleStarClick = (clickedStar) => {
-        setRating(clickedStar);
-    };
+
 
     const handleStarLeave = () => {
         if (rating === 0) {
@@ -110,17 +105,6 @@ function Content() {
         };
     };
 
-    const handleCommentClick = () => {
-        if (isLogin === true) {
-            if (textareRef.current) {
-                textareRef.current.blur();
-            }
-        }
-        else if (isLogin === false) {
-            navigate('/login');
-        };
-
-    };
 
     const decodeBase64Image = (base64) => {
         try {
@@ -151,6 +135,8 @@ function Content() {
 
                 if (response.status === 200 && username) {
                     const userRole = response.data.find((item) => item.username === username);
+                    sessionStorage.setItem('userId', userRole.id);
+                    console.log('DENEMEE', userRole);
                     if (userRole.role.name === "admin") {
                         setIsAdmin(true);
                     }
@@ -236,6 +222,16 @@ function Content() {
                     </div>
                 </div>
                 <div className='altContent'>
+                    <RecipePart filterRecipes={filterRecipes}
+                        decodeBase64Image={decodeBase64Image}
+                        handleEditClick={handleEditClick}
+                        handleDeleteClick={handleDeleteClick}
+                        handleStarHover={handleStarHover}
+                        handleStarLeave={handleStarLeave}
+                        setRating={setRating}
+                        isAdmin={isAdmin}
+                        rating={rating}
+                        isLogin={isLogin} />
 
                 </div>
             </div>

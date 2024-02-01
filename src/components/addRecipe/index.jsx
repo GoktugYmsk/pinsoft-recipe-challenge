@@ -13,12 +13,13 @@ function AddRecipe() {
     const [category, setCategory] = useState('Tatlı');
     const [recipeName, setRecipeName] = useState('');
     const [prepare, setPrepare] = useState('');
-    const [ingredients, setIngredients] = useState('');
+    const [ingredientsRecipe, setIngredientsRecipe] = useState('');
     const [photo, setPhoto] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
+    const userName = sessionStorage.getItem('userName');
 
     const dispatch = useDispatch();
 
@@ -30,52 +31,57 @@ function AddRecipe() {
         navigate('/');
     };
 
-    const handleAddRecipe = () => {
+    // ...
+
+    const handleAddRecipe = async () => {
         if (prepare.length > 250) {
             setErrorMessage('Hazırlanışı alanına en fazla 250 karakter girebilirsiniz.');
             return;
         }
 
-        const fetchData = async () => {
-            try {
-                let selectCategoryId;
-                switch (category) {
-                    case 'Kahvaltı':
-                        selectCategoryId = 1;
-                        break;
-                    case 'Ana Yemek':
-                        selectCategoryId = 2;
-                        break;
-                    case 'Tatlı':
-                        selectCategoryId = 3;
-                        break;
-                    case 'Salata':
-                        selectCategoryId = 4;
-                        break;
-                }
-
-                const newRecipe = {
-                    name: recipeName,
-                    explanation: prepare,
-                    categoryId: selectCategoryId,
-                    base64img: photo,
-                };
-
-                const sendRecipe = await api.post('/recipe', newRecipe);
-
-                if (sendRecipe.status === 200) {
-                    dispatch(setToastMessage('Tarif Başarıyla Eklendi'));
-                    dispatch(setIsToastActive(true));
-                    navigate('/');
-                }
-                console.log('Tarif başarıyla eklendi:', sendRecipe);
-            } catch (error) {
-                console.error('Veri gönderilemedi:', error);
+        try {
+            let selectCategoryId;
+            switch (category) {
+                case 'Kahvaltı':
+                    selectCategoryId = 1;
+                    break;
+                case 'Ana Yemek':
+                    selectCategoryId = 2;
+                    break;
+                case 'Tatlı':
+                    selectCategoryId = 3;
+                    break;
+                case 'Salata':
+                    selectCategoryId = 4;
+                    break;
             }
-        };
 
-        fetchData();
+            const ingredientsArray = ingredientsRecipe.split(',').map(item => item.trim());
+
+            const newRecipe = {
+                name: recipeName,
+                explanation: prepare,
+                categoryId: selectCategoryId,
+                base64img: photo,
+                createdBy: userName,
+                ingredients: ingredientsArray,
+            };
+
+            const sendRecipe = await api.post('/recipe', newRecipe);
+
+            if (sendRecipe.status === 200) {
+                dispatch(setToastMessage('Tarif Başarıyla Eklendi'));
+                dispatch(setIsToastActive(true));
+                navigate('/');
+            }
+            console.log('Tarif başarıyla eklendi:', sendRecipe);
+        } catch (error) {
+            console.error('Veri gönderilemedi:', error);
+        }
     };
+
+    // ...
+
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];
@@ -108,7 +114,7 @@ function AddRecipe() {
                         {prepare.length > 250 && (
                             <p className="error-message">Hazırlanışı alanına en fazla 250 karakter girebilirsiniz.</p>
                         )}
-                        <textarea onChange={(e) => setIngredients(e.target.value)} className='textare-two' placeholder='Malzemeler' />
+                        <textarea onChange={(e) => setIngredientsRecipe(e.target.value)} className='textare-two' placeholder='Malzemeler' />
                     </div>
                     <div className='select'>
                         <select
