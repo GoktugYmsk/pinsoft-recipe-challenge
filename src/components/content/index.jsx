@@ -25,9 +25,12 @@ function Content() {
     const [isLogin, setIslogin] = useState(false);
     const [deletePopup, setDeletePopup] = useState(false);
     const [deleteRecipeId, setDeleteRecipeId] = useState();
+    const [categoryInfo, setCategoryInfo] = useState([]);
 
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
+
+    console.log('categoryInfo', categoryInfo);
 
     /*
     
@@ -182,6 +185,26 @@ function Content() {
         setDeletePopup(true);
     };
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+
+                const sendNewCategory = await api.get('/category');
+                if (sendNewCategory.status === 200) {
+                    setCategoryInfo(sendNewCategory.data);
+                }
+            } catch (error) {
+                console.log('Veriler gönderilirken hata oluştu');
+            }
+        }
+        fetchData();
+    }, []);
+
+
+    //HAMBURGERE ADMİN KULLANICI PASİF YAP EKLE
+    //HAMBURGERE ADMİN KATEGORİ
+
     return (
         <>
             <div className='container-content'>
@@ -193,30 +216,14 @@ function Content() {
                                 Kategori
                             </Dropdown.Toggle>
                             <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
-                                <Dropdown.Item
-                                    className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Kahvaltı')}
-                                >
-                                    Kahvaltı
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Ana Yemek')}
-                                >
-                                    Ana Yemek
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Tatlı')}
-                                >
-                                    Tatlı
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    className='topContent__filter_-dropdownMenu__hover'
-                                    onClick={() => setSelectedCategory('Salata')}
-                                >
-                                    Salata
-                                </Dropdown.Item>
+                                {categoryInfo.map((item, key) => (
+                                    <Dropdown.Item
+                                        className='topContent__filter_-dropdownMenu__hover'
+                                        onClick={() => setSelectedCategory('Kahvaltı')}
+                                    >
+                                        {item.name}
+                                    </Dropdown.Item>
+                                ))}
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>

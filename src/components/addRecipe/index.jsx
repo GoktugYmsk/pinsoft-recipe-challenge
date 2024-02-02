@@ -31,8 +31,6 @@ function AddRecipe() {
         navigate('/');
     };
 
-    // ...
-
     const handleAddRecipe = async () => {
         if (prepare.length > 250) {
             setErrorMessage('Hazırlanışı alanına en fazla 250 karakter girebilirsiniz.');
@@ -80,7 +78,6 @@ function AddRecipe() {
         }
     };
 
-    // ...
 
 
     const handleFileChange = (e) => {
@@ -126,7 +123,7 @@ function AddRecipe() {
                             <option value='Tatlı'>Tatlı</option>
                             <option value='Salata'>Salata</option>
                         </select>
-                        <label htmlFor='file-input'>
+                        <label htmlFor='file-input' className='file-input' >
                             <input
                                 id='file-input'
                                 type='file'

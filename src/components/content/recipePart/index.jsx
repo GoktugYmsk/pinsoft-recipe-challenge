@@ -21,12 +21,16 @@ function RecipePart({
 }) {
     const [inputStates, setInputStates] = useState(filterRecipes().map(() => false));
     const inputRefs = useRef(filterRecipes().map(() => React.createRef()));
+
     const [commentMessage, setCommentMessage] = useState('');
     const [photo, setPhoto] = useState('');
     const [openFile, setOpenFile] = useState(false);
-    const [recipeRaitng, setRecipeRating] = useState();
+    const [recipeRaiting, setRecipeRating] = useState();
+    const [starRating, setStarRating] = useState();
+    const [hoverRecipe, setHoverRecipe] = useState();
 
     const getUserId = sessionStorage.getItem('userId');
+
 
     console.log('GETUSERID', getUserId);
 
@@ -57,7 +61,7 @@ function RecipePart({
         setRating(clickedStar);
     };
 
-    const handleSendCommentClick = (recipeId) => {
+    const handleSendCommentClick = (getRecipeId) => {
         const fetchData = async () => {
             try {
                 const newRecipe = {
@@ -65,7 +69,7 @@ function RecipePart({
                     base64img: photo,
                     rating: rating,
                     userId: getUserId,
-                    recipeId: recipeId,
+                    recipeId: getRecipeId
                 };
 
                 const sendRecipe = await api.post('/reciperating', newRecipe);
@@ -100,10 +104,39 @@ function RecipePart({
         }
     };
 
+
+    const handleRecipeHover = (recipeId) => {
+        setHoverRecipe(recipeId);
+    };
+
+    useEffect(() => {
+        console.log('hoverRecipe', hoverRecipe);
+        const fetchData = async () => {
+            try {
+                const response = await api.get(`/reciperating/${hoverRecipe}`);
+                setRecipeRating(response.data.rating);
+                const writeRecipeStar = response.data.map((item) => {
+                    return item.rating;
+                });
+                setStarRating(writeRecipeStar);
+                console.log('responsesetRecipeRatingsetRecipeRating', response);
+            } catch (error) {
+                console.error('Veri alınamadı:', error);
+            }
+        };
+
+        fetchData();
+    }, [hoverRecipe]);
+
+    useEffect(() => {
+        console.log('starRating', starRating);
+    }, [starRating]);
+
+
     // useEffect(() => {
     //     const fetchData = async () => {
     //         try {
-    //             const response = await api.get('/');
+    //             const response = await api.get(`/reciperating/${recipeId}`);
     //             setRecipeRating(response.data);
     //             console.log('responsesetRecipeRatingsetRecipeRating', response);
     //         } catch (error) {
@@ -115,11 +148,15 @@ function RecipePart({
     // }, []);
 
 
+    // Yıldızlara bakınacak
+
 
     return (
         <>
             {filterRecipes().map((filteredRecipe, index) => (
-                <div key={index} className='container-content__recipe'>
+                <div key={index} className='container-content__recipe'
+                    onMouseEnter={() => handleRecipeHover(filteredRecipe.id)}
+                >
                     <h2>{filteredRecipe.name}</h2>
                     <div className='container-content__recipe__altBox'>
                         <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
@@ -159,7 +196,7 @@ function RecipePart({
                                 <MdOutlinePhotoLibrary onClick={() => setOpenFile(true)} className='recipeCommentPhotoIcon' />
                             </label>
                         </div>
-                        <p>{filteredRecipe.content}</p>
+                        <p>{filteredRecipe.explanation}</p>
                     </div>
                 </div>
             ))}
