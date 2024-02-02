@@ -8,12 +8,7 @@ import { useDispatch } from 'react-redux';
 
 function CategoryPopup({ setOpenCategoryPopup, openCategoryPopup }) {
     const [newCategoryName, setNewCategoryName] = useState('');
-    const [categoryID, setCategoryID] = useState();
     const dispacth = useDispatch();
-
-    const getUserId = sessionStorage.getItem('userId');
-
-    console.log('categoryID', categoryID);
 
     const handleCategoryClick = async () => {
         try {
@@ -37,25 +32,6 @@ function CategoryPopup({ setOpenCategoryPopup, openCategoryPopup }) {
             console.log('Veriler gönderilirken hata oluştu');
         }
     };
-
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-
-    //             const sendNewCategory = await api.get('/category');
-    //             if (sendNewCategory.status === 200) {
-    //                 setCategoryID(sendNewCategory.data.length);
-    //             }
-    //         } catch (error) {
-    //             console.log('Veriler gönderilirken hata oluştu');
-    //         }
-    //     }
-    //     fetchData();
-    // }, []);
-
-
-    // category post isteği atarken 400 geliyor
 
     return (
         <>

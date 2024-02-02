@@ -31,6 +31,7 @@ function Content() {
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
     console.log('categoryInfo', categoryInfo);
+    console.log('selectedCategory', selectedCategory)
 
     /*
     
@@ -55,11 +56,18 @@ function Content() {
         }
 
         if (selectedCategory) {
-            filteredRecipes = filteredRecipes.filter(recipe => recipe.category.name === selectedCategory);
+            filteredRecipes = filteredRecipes.filter(recipe =>
+                recipe.category.name.toLowerCase().includes(selectedCategory.toLowerCase())
+            );
         }
 
         return filteredRecipes;
     };
+
+
+
+    console.log('RECİPE', recipe)
+
 
 
     const handleStarHover = (hoveredStar) => {
@@ -218,8 +226,9 @@ function Content() {
                             <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
                                 {categoryInfo.map((item, key) => (
                                     <Dropdown.Item
+                                        key={key}
                                         className='topContent__filter_-dropdownMenu__hover'
-                                        onClick={() => setSelectedCategory('Kahvaltı')}
+                                        onClick={() => setSelectedCategory(item.name)}
                                     >
                                         {item.name}
                                     </Dropdown.Item>

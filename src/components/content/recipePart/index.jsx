@@ -148,7 +148,7 @@ function RecipePart({
     // }, []);
 
 
-    // Yıldızlara bakınacak
+    // Yıldızlara bakılacak
 
 
     return (
