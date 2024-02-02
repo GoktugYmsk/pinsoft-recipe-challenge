@@ -28,11 +28,13 @@ function RecipePart({
     const [recipeRaiting, setRecipeRating] = useState();
     const [starRating, setStarRating] = useState();
     const [hoverRecipe, setHoverRecipe] = useState();
+    const [ingredients, setIngredients] = useState([]);
 
     const getUserId = sessionStorage.getItem('userId');
 
 
     console.log('GETUSERID', getUserId);
+    console.log('ingredients', ingredients)
 
     const navigate = useNavigate();
 
@@ -128,9 +130,22 @@ function RecipePart({
         fetchData();
     }, [hoverRecipe]);
 
+
     useEffect(() => {
-        console.log('starRating', starRating);
-    }, [starRating]);
+        const fetchData = async () => {
+            try {
+
+                const sendNewCategory = await api.get('/ingredients');
+                if (sendNewCategory.status === 200) {
+                    setIngredients(sendNewCategory.data);
+                }
+            } catch (error) {
+                console.log('Veriler gönderilirken hata oluştu');
+            }
+        }
+        fetchData();
+    }, []);
+
 
 
     // useEffect(() => {
@@ -197,6 +212,14 @@ function RecipePart({
                             </label>
                         </div>
                         <p>{filteredRecipe.explanation}</p>
+                        <div className='container-content__recipe__altBox__ingredients' >
+                            <h4>Malzeme Listesi</h4>
+                            <ul>
+                                {ingredients[index].split('\n').map((ingredient, i) => (
+                                    <li key={i}>{ingredient}</li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             ))}
