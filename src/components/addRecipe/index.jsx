@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Header from '../header';
+import Dropdown from 'react-bootstrap/Dropdown';
 import HamburgerMenu from '../hamburgerMenu';
 import Button from 'react-bootstrap/Button';
 import './index.scss';
@@ -15,11 +16,16 @@ function AddRecipe() {
     const [prepare, setPrepare] = useState('');
     const [ingredientsRecipe, setIngredientsRecipe] = useState('');
     const [photo, setPhoto] = useState('');
+    const [categoryInfo, setCategoryInfo] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    console.log('categoryInfo', categoryInfo);
+
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
     const userName = sessionStorage.getItem('userName');
+    console.log('selectedCategory', selectedCategory);
 
     const dispatch = useDispatch();
 
@@ -31,6 +37,22 @@ function AddRecipe() {
         navigate('/');
     };
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+
+                const sendNewCategory = await api.get('/category');
+                if (sendNewCategory.status === 200) {
+                    setCategoryInfo(sendNewCategory.data);
+                }
+            } catch (error) {
+                console.log('Veriler gönderilirken hata oluştu');
+            }
+        }
+        fetchData();
+    }, []);
+
     const handleAddRecipe = async () => {
         if (prepare.length > 250) {
             setErrorMessage('Hazırlanışı alanına en fazla 250 karakter girebilirsiniz.');
@@ -38,28 +60,12 @@ function AddRecipe() {
         }
 
         try {
-            let selectCategoryId;
-            switch (category) {
-                case 'Kahvaltı':
-                    selectCategoryId = 1;
-                    break;
-                case 'Ana Yemek':
-                    selectCategoryId = 2;
-                    break;
-                case 'Tatlı':
-                    selectCategoryId = 3;
-                    break;
-                case 'Salata':
-                    selectCategoryId = 4;
-                    break;
-            }
 
             const ingredientsArray = ingredientsRecipe.split(',').map(item => item.trim());
-
             const newRecipe = {
                 name: recipeName,
                 explanation: prepare,
-                categoryId: selectCategoryId,
+                categoryId: selectedCategory,
                 base64img: photo,
                 createdBy: userName,
                 ingredients: ingredientsArray,
@@ -77,6 +83,10 @@ function AddRecipe() {
             console.error('Veri gönderilemedi:', error);
         }
     };
+
+    useEffect(() => {
+        console.log('photo', photo);
+    }, [photo]);
 
 
 
@@ -114,15 +124,28 @@ function AddRecipe() {
                         <textarea onChange={(e) => setIngredientsRecipe(e.target.value)} className='textare-two' placeholder='Malzemeler' />
                     </div>
                     <div className='select'>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}>
-                            <option value='Kategori Seçiniz' disabled>Kategori</option>
-                            <option value='Kahvaltı'>Kahvaltı</option>
-                            <option value='Ana Yemek'>Ana Yemek</option>
-                            <option value='Tatlı'>Tatlı</option>
-                            <option value='Salata'>Salata</option>
-                        </select>
+                        <Dropdown>
+                            <Dropdown.Toggle className='topContent__filter__dropdown'>
+                                Kategori
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
+                                <Dropdown.Item
+                                    className='topContent__filter_-dropdownMenu__hover'
+                                    onClick={() => setSelectedCategory('')}
+                                >
+                                    Tüm Kategoriler
+                                </Dropdown.Item>
+                                {categoryInfo.map((item, key) => (
+                                    <Dropdown.Item
+                                        key={key}
+                                        className='topContent__filter_-dropdownMenu__hover'
+                                        onClick={() => setSelectedCategory(item.id)}
+                                    >
+                                        {item.name}
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
                         <label htmlFor='file-input' className='file-input' >
                             <input
                                 id='file-input'

@@ -177,7 +177,7 @@ function RecipePart({
                         <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
                         <div className='container-content__recipe__altBox__icons'>
                             <FaRegComment onClick={() => handleCommentClick(index)} className='icon' />
-                            <CiEdit onClick={() => handleEditClick(filteredRecipe)} className='icon' />
+                            <CiEdit onClick={() => handleEditClick(filteredRecipe, index)} className='icon' />
                             {isAdmin && <MdDelete onClick={() => handleDeleteClick(filteredRecipe.id)} className='deleteIcon' />}
                             <div className='point'>
                                 {[1, 2, 3, 4, 5].map((star) => (

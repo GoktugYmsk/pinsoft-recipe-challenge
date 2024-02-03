@@ -26,19 +26,24 @@ function Content() {
     const [deletePopup, setDeletePopup] = useState(false);
     const [deleteRecipeId, setDeleteRecipeId] = useState();
     const [categoryInfo, setCategoryInfo] = useState([]);
+    const [recipeId, setRecipeId] = useState();
+    const [photo, setPhoto] = useState('');
+    const [ingredientsRecipe, setIngredientsRecipe] = useState('');
+    const [selectedCategoryUpdate, setSelectedCategoryUpdate] = useState('');
 
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
-    console.log('categoryInfo', categoryInfo);
-    console.log('selectedCategory', selectedCategory)
+    const getUserId = sessionStorage.getItem('userId');
+
+
+
+    useEffect(() => {
+        console.log('photo', photo)
+    }, [photo]);
 
     /*
-    
-    
     UPDATE İŞLEMLERİNE BAK
-    
-    
     */
 
     const navigate = useNavigate();
@@ -66,8 +71,6 @@ function Content() {
 
 
 
-    console.log('RECİPE', recipe)
-
 
 
     const handleStarHover = (hoveredStar) => {
@@ -84,32 +87,44 @@ function Content() {
         }
     };
 
-    const updateRecipeInLocalStorage = () => {
-        const updatedRecipes = recipe.map((recipe) => {
-            if (recipe.name === editRecipeName) {
-                return {
-                    ...recipe,
-                    content: editRecipeContent,
-                    category: editRecipeCategory,
-                };
+
+    const handleSaveChanges = async () => {
+        try {
+            const editRecipe = {
+                id: recipeId,
+                name: editRecipeName,
+                explanation: editRecipeContent,
+                categoryId: selectedCategoryUpdate,
+                base64img: photo,
+                ingredients: ingredientsRecipe,
+                userId: getUserId
+            };
+
+            const sendNewCategory = await api.put(`/recipe/${recipeId}`, editRecipe);
+            if (sendNewCategory.status === 200) {
+                setRecipePopup(false);
+                // dispacth(setToastMessage('Yeni Kategori Eklendi'));
+                // setTimeout(() => {
+                //     dispacth(setIsToastActive(true));
+                //     setInterval(() => {
+                //         window.location.reload();
+                //     }, 3000);
+                // }, 3000);
+
             }
-            return recipe;
-        });
-        setRecipe(updatedRecipes);
+        } catch (error) {
+            console.log('Veriler gönderilirken hata oluştu');
+        }
     };
 
-    const handleSaveChanges = () => {
-        updateRecipeInLocalStorage();
-        setRecipePopup(false);
-    };
-
-    const handleEditClick = (recipe) => {
+    const handleEditClick = (recipe, index) => {
         if (isLogin === true) {
             setEditRecipeName(recipe.name);
-            setEditRecipeContent(recipe.content);
-            setEditRecipeCategory(recipe.category);
+            setEditRecipeContent(recipe.explanation);
+            setEditRecipeCategory(recipe.category.name);
+            setIngredientsRecipe(index)
             setRecipePopup(true);
-
+            setRecipeId(recipe.id);
         }
         else if (isLogin === false) {
             navigate('/login');
@@ -147,7 +162,6 @@ function Content() {
                 if (response.status === 200 && username) {
                     const userRole = response.data.find((item) => item.username === username);
                     sessionStorage.setItem('userId', userRole.id);
-                    console.log('DENEMEE', userRole);
                     if (userRole.role.name === "admin") {
                         setIsAdmin(true);
                     }
@@ -210,8 +224,27 @@ function Content() {
     }, []);
 
 
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                const base64Image = reader.result;
+                setPhoto(base64Image);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+
     //HAMBURGERE ADMİN KULLANICI PASİF YAP EKLE
-    //HAMBURGERE ADMİN KATEGORİ
+    // filtrelemede seçilenleri temizle özelliği ekle
+
+
 
     return (
         <>
@@ -224,6 +257,12 @@ function Content() {
                                 Kategori
                             </Dropdown.Toggle>
                             <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
+                                <Dropdown.Item
+                                    className='topContent__filter_-dropdownMenu__hover'
+                                    onClick={() => setSelectedCategory('')}
+                                >
+                                    Tüm Kategoriler
+                                </Dropdown.Item>
                                 {categoryInfo.map((item, key) => (
                                     <Dropdown.Item
                                         key={key}
@@ -255,10 +294,16 @@ function Content() {
                 setEditRecipeName={setEditRecipeName}
                 setEditRecipeContent={setEditRecipeContent}
                 setEditRecipeCategory={setEditRecipeCategory}
+                setSelectedCategoryUpdate={setSelectedCategoryUpdate}
                 handleSaveChanges={handleSaveChanges}
                 editRecipeName={editRecipeName}
                 editRecipeContent={editRecipeContent}
                 editRecipeCategory={editRecipeCategory}
+                handleFileChange={handleFileChange}
+                setIngredientsRecipe={setIngredientsRecipe}
+                ingredientsRecipe={ingredientsRecipe}
+                setPhoto={setPhoto}
+                photo={photo}
             />}
             {isToastACtive && (
                 <div className="toast-container">
