@@ -7,7 +7,7 @@ import api from '../../interceptor';
 import { useNavigate } from 'react-router-dom';
 import DeletePopup from './deletePopup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsToastActive } from '../configure';
+import { setIsToastActive, setToastMessage } from '../configure';
 import UpdatePopup from './updatePopup';
 import RecipePart from './recipePart';
 

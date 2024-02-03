@@ -215,9 +215,12 @@ function RecipePart({
                         <div className='container-content__recipe__altBox__ingredients' >
                             <h4>Malzeme Listesi</h4>
                             <ul>
-                                {ingredients[index].split('\n').map((ingredient, i) => (
-                                    <li key={i}>{ingredient}</li>
-                                ))}
+                                {ingredients[index]
+                                    ? ingredients[index].split('\n').map((ingredient, i) => (
+                                        <li key={i}>{ingredient}</li>
+                                    ))
+                                    : <li>Loading...</li>
+                                }
                             </ul>
                         </div>
                     </div>

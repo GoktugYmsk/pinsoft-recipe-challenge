@@ -74,7 +74,7 @@ function AddRecipe() {
             const sendRecipe = await api.post('/recipe', newRecipe);
 
             if (sendRecipe.status === 200) {
-                dispatch(setToastMessage('Tarif Başarıyla Eklendi'));
+                dispatch(setToastMessage('Tarif Başarıyla Eklendi !'));
                 dispatch(setIsToastActive(true));
                 navigate('/');
             }

@@ -8,7 +8,9 @@ import { setToastMessage } from '../../configure';
 import { setIsToastActive } from '../../configure';
 
 
-function DeletePopup({ deleteRecipeId, setDeletePopup, setToastActive }) {
+function DeletePopup({ deleteRecipeId, setDeletePopup }) {
+
+    console.log('deleteRecipeId', deleteRecipeId);
 
     const dispatch = useDispatch();
 
@@ -16,7 +18,7 @@ function DeletePopup({ deleteRecipeId, setDeletePopup, setToastActive }) {
         try {
             const deleteRecipe = await api.delete(`/recipe/${deleteRecipeId}`);
             if (deleteRecipe.status === 200) {
-                dispatch(setToastMessage('Tarif başarıyla silindi'));
+                dispatch(setToastMessage('Tarif başarıyla silindi !'));
                 dispatch(setIsToastActive(true));
                 setDeletePopup(false);
                 setInterval(() => {
