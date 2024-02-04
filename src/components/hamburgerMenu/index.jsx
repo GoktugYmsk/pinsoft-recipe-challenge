@@ -59,6 +59,11 @@ function HamburgerMenu() {
     };
     const isToken = sessionStorage.getItem('token');
 
+    const handleUserActivateClick = () => {
+        dispatch(setIsHamburger(false));
+        navigate('/useractivacation');
+    };
+
     useEffect(() => {
         if (isToken) {
             setIslogin(true);
@@ -108,7 +113,7 @@ function HamburgerMenu() {
                             {isAdmin &&
                                 <>
                                     <h3 onClick={() => setOpenCategoryPopup(true)} >Kategori Ekle</h3>
-                                    <h3>Kullanıcı Aktivasyon</h3>
+                                    <h3 onClick={handleUserActivateClick} >Kullanıcı Aktivasyon</h3>
                                 </>
                             }
                         </>

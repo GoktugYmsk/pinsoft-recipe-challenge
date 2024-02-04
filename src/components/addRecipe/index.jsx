@@ -125,12 +125,12 @@ function AddRecipe() {
                     </div>
                     <div className='select'>
                         <Dropdown>
-                            <Dropdown.Toggle className='topContent__filter__dropdown'>
+                            <Dropdown.Toggle className='addContent-dropdown'>
                                 Kategori
                             </Dropdown.Toggle>
-                            <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
+                            <Dropdown.Menu className='addContent-dropdownMenu'>
                                 <Dropdown.Item
-                                    className='topContent__filter_-dropdownMenu__hover'
+                                    className='addContent-dropdownMenu__hover'
                                     onClick={() => setSelectedCategory('')}
                                 >
                                     Tüm Kategoriler
@@ -138,7 +138,7 @@ function AddRecipe() {
                                 {categoryInfo.map((item, key) => (
                                     <Dropdown.Item
                                         key={key}
-                                        className='topContent__filter_-dropdownMenu__hover'
+                                        className='addContent-dropdownMenu__hover'
                                         onClick={() => setSelectedCategory(item.id)}
                                     >
                                         {item.name}

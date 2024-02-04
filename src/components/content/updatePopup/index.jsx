@@ -77,9 +77,9 @@ function UpdatePopup({ setRecipePopup,
                         <Dropdown.Toggle className='update-popup-dropdown'>
                             Kategori
                         </Dropdown.Toggle>
-                        <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
+                        <Dropdown.Menu className='update-popup-dropdownMenu'>
                             <Dropdown.Item
-                                className='topContent__filter_-dropdownMenu__hover'
+                                className='update-popup-dropdown__hover'
                                 onClick={() => setSelectedCategoryUpdate('')}
                             >
                                 Tüm Kategoriler
@@ -87,7 +87,7 @@ function UpdatePopup({ setRecipePopup,
                             {categoryInfo.map((item, key) => (
                                 <Dropdown.Item
                                     key={key}
-                                    className='topContent__filter_-dropdownMenu__hover'
+                                    className='update-popup-dropdown__hover'
                                     onClick={() => setSelectedCategoryUpdate(item.id)}
                                 >
                                     {item.name}

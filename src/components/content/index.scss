@@ -202,6 +202,31 @@
             border: rgb(236, 127, 25);
             background-color: rgb(236, 127, 25);
         }
+
+        .update-popup-dropdownMenu {
+            background-color: white;
+
+            .update-popup-dropdown__hover {
+                &:hover {
+                    background-color: rgb(244, 139, 41);
+                }
+            }
+        }
+
+        .topContent__filter__dropdown {
+            border: rgb(236, 127, 25);
+            background-color: rgb(236, 127, 25);
+        }
+
+        .topContent__filter_-dropdownMenu {
+            background-color: white;
+
+            .topContent__filter_-dropdownMenu__hover {
+                &:hover {
+                    background-color: rgb(244, 139, 41);
+                }
+            }
+        }
     }
 
     .save-change-button {

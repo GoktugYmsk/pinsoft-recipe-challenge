@@ -54,6 +54,26 @@
             .file-input {
                 cursor: pointer;
             }
+
+            .addContent-dropdown {
+                border: rgb(236, 127, 25);
+                background-color: rgb(236, 127, 25);
+
+                &:hover {
+                    border: rgb(255, 148, 48);
+                    background-color: rgb(255, 148, 48);
+                }
+            }
+
+            .addContent-dropdownMenu {
+                background-color: white;
+
+                .addContent-dropdownMenu__hover {
+                    &:hover {
+                        background-color: rgb(244, 139, 41);
+                    }
+                }
+            }
         }
 
         .container-addRecipe__box__down {
