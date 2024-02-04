@@ -25,12 +25,14 @@ function RecipePart({
     const [commentMessage, setCommentMessage] = useState('');
     const [photo, setPhoto] = useState('');
     const [openFile, setOpenFile] = useState(false);
-    const [recipeRaiting, setRecipeRating] = useState();
     const [starRating, setStarRating] = useState();
     const [hoverRecipe, setHoverRecipe] = useState();
     const [ingredients, setIngredients] = useState([]);
+    const [reciperating, setReciperating] = useState([]);
+    const [isCommentActive, setIsCommentActive] = useState(false);
 
     const getUserId = sessionStorage.getItem('userId');
+    console.log('reciperating', reciperating);
 
 
     // console.log('ingredients', ingredients)
@@ -106,28 +108,22 @@ function RecipePart({
     };
 
 
+    const handleGetComment = async (recipeId) => {
+        try {
+            const response = await api.get(`/reciperating/${recipeId}`);
+            setReciperating(response.data);
+            setIsCommentActive(!isCommentActive);
+        } catch (error) {
+            console.error('Veri alınamadı:', error);
+        }
+    };
+
+
+
     const handleRecipeHover = (recipeId) => {
         setHoverRecipe(recipeId);
     };
 
-    useEffect(() => {
-        console.log('hoverRecipe', hoverRecipe);
-        const fetchData = async () => {
-            try {
-                const response = await api.get(`/reciperating/${hoverRecipe}`);
-                setRecipeRating(response.data.rating);
-                const writeRecipeStar = response.data.map((item) => {
-                    return item.rating;
-                });
-                setStarRating(writeRecipeStar);
-                console.log('responsesetRecipeRatingsetRecipeRating', response);
-            } catch (error) {
-                console.error('Veri alınamadı:', error);
-            }
-        };
-
-        fetchData();
-    }, [hoverRecipe]);
 
 
     useEffect(() => {
@@ -147,6 +143,22 @@ function RecipePart({
 
 
     // Yıldızlara bakılacak !!!!!!!!!!!!!!!
+    // yıldızlarda hala hata var sadece yıldızla ve yorum stili kaldı
+    // en son kod temizliği yaparsın
+
+    const uniqRating = reciperating.map((star) => {
+        return star.rating;
+    })
+
+    console.log('uniqRating', uniqRating)
+
+    const avgRatings = reciperating.reduce((acc, curr) => {
+        acc[curr.recipeId] = acc[curr.recipeId] || { sum: 0, count: 0 };
+        acc[curr.recipeId].sum += curr.rating;
+        acc[curr.recipeId].count += 1;
+        return acc;
+    }, {});
+
 
 
     return (
@@ -166,7 +178,7 @@ function RecipePart({
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <FaStar
                                         key={star}
-                                        className={`icon ${star <= rating ? 'ratingYellow' : 'ratingGrey'}`}
+                                        className={`icon ${star <= avgRatings ? 'ratingYellow' : 'ratingGrey'}`}
                                         onClick={() => handleStarClick(star)}
                                     />
                                 ))}
@@ -192,7 +204,20 @@ function RecipePart({
                                 <MdOutlinePhotoLibrary onClick={() => setOpenFile(true)} className='recipeCommentPhotoIcon' />
                             </label>
                         </div>
-                        <p>{filteredRecipe.explanation}</p>
+                        <h5 onClick={() => handleGetComment(filteredRecipe.id)}>Yorumları Göster</h5>
+                        {isCommentActive &&
+                            reciperating
+                                .filter(itemComment => itemComment.id === filteredRecipe.id)
+                                .map((filteredComment, index) => (
+                                    <div className='recipe-comments' key={index}>
+                                        <div className='recipe-comments__box'>
+                                            <p>{filteredComment.comment}</p>
+                                            <h6>{filteredComment.recipe.createdBy}</h6>
+                                        </div>
+                                    </div>
+                                ))
+                        }
+                        <p> merhaba{filteredRecipe.explanation}</p>
                         <div className='container-content__recipe__altBox__ingredients' >
                             <h4>Malzeme Listesi</h4>
                             <ul>

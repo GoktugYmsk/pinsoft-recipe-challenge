@@ -3,8 +3,10 @@ import Header from '../../header'
 import HamburgerMenu from '..'
 import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
+import { FcApproval } from "react-icons/fc";
 import './index.scss'
 import { useDispatch, useSelector } from 'react-redux';
+import { FaTimes } from "react-icons/fa";
 import api from '../../../interceptor';
 import { setIsToastActive, setToastMessage } from '../../configure';
 
@@ -88,10 +90,21 @@ function UserActivation() {
                                         </tr>
                                     </tbody>
                                 </table>
+                                {item.accountActive &&
+                                    <FcApproval className='active-icon' />
+                                }
                                 <div className='container-userActivation__box__list__buttons'>
-                                    <Button onClick={() => handleActivateClick(item.id)}>Activate User</Button>
-                                    <Button onClick={() => handleInActivateClick(item.id)}>Inactivate User</Button>
+                                    {(!item.accountActive ?
+
+                                        <Button onClick={() => handleActivateClick(item.id)}>Activate User</Button>
+                                        : (
+                                            <Button onClick={() => handleInActivateClick(item.id)}>Inactivate User</Button>
+                                        )
+                                    )}
                                 </div>
+                                {!item.accountActive &&
+                                    <FaTimes className='inactive-icon' />
+                                }
                             </div>
                         </div>
                     ))}

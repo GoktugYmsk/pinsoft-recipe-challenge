@@ -11,7 +11,7 @@
         justify-content: flex-start;
         flex-direction: column;
         background: white;
-        width: 1000px;
+        width: 1200px;
         height: 600px;
         gap: 20px;
         overflow: scroll;
@@ -25,7 +25,8 @@
             background: rgb(255, 155, 101);
             border-radius: 40px;
             padding: 40px;
-            width: 800px;
+            gap: 10px;
+            width: 1000px;
 
             .container-userActivation__box__list__userInfo {
                 display: table;
@@ -71,4 +72,12 @@
     top: 120px;
     right: 20px;
     background: #a2e47c;
+}
+
+.active-icon {
+    font-size: 35px;
+}
+
+.inactive-icon {
+    font-size: 35px;
 }

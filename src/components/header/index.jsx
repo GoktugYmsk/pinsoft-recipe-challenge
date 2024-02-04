@@ -29,8 +29,8 @@ function Header() {
 
     const handleLogoutClick = () => {
         sessionStorage.removeItem('token');
-        window.location.reload();
         navigate('/')
+        window.location.reload();
     };
 
     const handleLoginClick = () => {
