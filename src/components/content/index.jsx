@@ -251,11 +251,6 @@ function Content() {
     };
 
 
-    //HAMBURGERE ADMİN KULLANICI PASİF YAP EKLE
-    // filtrelemede seçilenleri temizle özelliği ekle
-
-
-
     return (
         <>
             <div className='container-content'>
