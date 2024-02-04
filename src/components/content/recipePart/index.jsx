@@ -33,8 +33,7 @@ function RecipePart({
     const getUserId = sessionStorage.getItem('userId');
 
 
-    console.log('GETUSERID', getUserId);
-    console.log('ingredients', ingredients)
+    // console.log('ingredients', ingredients)
 
     const navigate = useNavigate();
 
@@ -147,23 +146,7 @@ function RecipePart({
     }, []);
 
 
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await api.get(`/reciperating/${recipeId}`);
-    //             setRecipeRating(response.data);
-    //             console.log('responsesetRecipeRatingsetRecipeRating', response);
-    //         } catch (error) {
-    //             console.error('Veri alınamadı:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-
-
-    // Yıldızlara bakılacak
+    // Yıldızlara bakılacak !!!!!!!!!!!!!!!
 
 
     return (
@@ -184,8 +167,6 @@ function RecipePart({
                                     <FaStar
                                         key={star}
                                         className={`icon ${star <= rating ? 'ratingYellow' : 'ratingGrey'}`}
-                                        onMouseEnter={() => handleStarHover(star)}
-                                        onMouseLeave={handleStarLeave}
                                         onClick={() => handleStarClick(star)}
                                     />
                                 ))}

@@ -28,13 +28,17 @@ function Content() {
     const [categoryInfo, setCategoryInfo] = useState([]);
     const [recipeId, setRecipeId] = useState();
     const [photo, setPhoto] = useState('');
-    const [ingredientsRecipe, setIngredientsRecipe] = useState('');
+    const [ingredientsRecipe, setIngredientsRecipe] = useState([]);
     const [selectedCategoryUpdate, setSelectedCategoryUpdate] = useState('');
 
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
-    const getUserId = sessionStorage.getItem('userId');
+    const getUserId = parseInt(sessionStorage.getItem('userId'), 10);
+
+
+
+    console.log('ingredientsRecipe', ingredientsRecipe);
 
 
 
@@ -90,32 +94,38 @@ function Content() {
 
     const handleSaveChanges = async () => {
         try {
-            const editRecipe = {
-                id: recipeId,
-                name: editRecipeName,
-                explanation: editRecipeContent,
-                categoryId: selectedCategoryUpdate,
-                base64img: photo,
-                ingredients: ingredientsRecipe,
-                userId: getUserId
-            };
+            if (!recipeId || !editRecipeName || !editRecipeContent || !selectedCategoryUpdate || !photo || !ingredientsRecipe || !getUserId) {
+                alert('Tüm alanların dolu ve seçili olduğundan emin olun !');
+                return;
+            }
+            else {
+                const editRecipe = {
+                    id: recipeId,
+                    name: editRecipeName,
+                    explanation: editRecipeContent,
+                    categoryId: selectedCategoryUpdate,
+                    base64img: photo,
+                    ingredients: ingredientsRecipe,
+                    userId: getUserId
+                };
 
-            const sendNewCategory = await api.put(`/recipe/${recipeId}`, editRecipe);
-            if (sendNewCategory.status === 200) {
-                setRecipePopup(false);
-                // dispacth(setToastMessage('Yeni Kategori Eklendi'));
-                // setTimeout(() => {
-                //     dispacth(setIsToastActive(true));
-                //     setInterval(() => {
-                //         window.location.reload();
-                //     }, 3000);
-                // }, 3000);
-
+                const sendNewCategory = await api.put(`/recipe/${recipeId}`, editRecipe);
+                if (sendNewCategory.status === 200) {
+                    setRecipePopup(false);
+                    dispatch(setToastMessage('Tarif Güncellendi'));
+                    setTimeout(() => {
+                        dispatch(setIsToastActive(true));
+                        setInterval(() => {
+                            window.location.reload();
+                        }, 3000);
+                    }, 3000);
+                }
             }
         } catch (error) {
-            console.log('Veriler gönderilirken hata oluştu');
+            console.error('Veriler gönderilirken hata oluştu', error);
         }
     };
+
 
     const handleEditClick = (recipe, index) => {
         if (isLogin === true) {

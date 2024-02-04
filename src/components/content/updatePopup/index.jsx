@@ -13,12 +13,8 @@ function UpdatePopup({ setRecipePopup,
 }) {
     const [ingredienstID, setIngredientsID] = useState([]);
     const [categoryInfo, setCategoryInfo] = useState([]);
-    const [deneme, setDeneme] = useState('');
 
-    useEffect(() => {
-        console.log('KEŞANKEŞANKEŞANKEŞAN', deneme)
-    }, [deneme])
-
+    console.log('ingredientsRecipeingredientsRecipeingredientsRecipe', ingredientsRecipe);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -102,13 +98,7 @@ function UpdatePopup({ setRecipePopup,
                     {/* <input type="text" value={editRecipeCategory} onChange={(e) => setEditRecipeCategory(e.target.value)} /> */}
                     <h3>Ingredints:</h3>
                     <textarea
-                        value={
-                            ingredienstID[ingredientsRecipe] &&
-                            ingredienstID[ingredientsRecipe].split('\n').map((ingredient, i) => (
-                                ingredient
-                            ))
-                        }
-                        onChange={(e) => setIngredientsRecipe(e.target.value)}
+                        onChange={(e) => setIngredientsRecipe(e.target.value.split('\n'))}
                         className='textare-two'
                         placeholder='Malzemeler'
                     />
