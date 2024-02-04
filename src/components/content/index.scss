@@ -171,7 +171,10 @@
             }
         }
     }
+
 }
+
+
 
 
 
@@ -194,6 +197,28 @@
         height: 500px;
         background: rgb(255, 155, 101);
         color: white;
+
+        .update-popup-dropdown {
+            border: rgb(236, 127, 25);
+            background-color: rgb(236, 127, 25);
+        }
+    }
+
+    .save-change-button {
+        border: rgb(236, 127, 25);
+        background-color: rgb(236, 127, 25);
+
+        &:hover {
+            border: rgb(255, 148, 48);
+            background-color: rgb(255, 148, 48);
+        }
+    }
+
+    .update-popup-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
     }
 }
 

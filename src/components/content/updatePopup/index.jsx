@@ -74,7 +74,7 @@ function UpdatePopup({ setRecipePopup,
                     <h3>Content:</h3>
                     <textarea value={editRecipeContent} onChange={(e) => setEditRecipeContent(e.target.value)} />
                     <Dropdown value={editRecipeCategory} >
-                        <Dropdown.Toggle className='topContent__filter__dropdown'>
+                        <Dropdown.Toggle className='update-popup-dropdown'>
                             Kategori
                         </Dropdown.Toggle>
                         <Dropdown.Menu className='topContent__filter_-dropdownMenu'>
@@ -95,7 +95,6 @@ function UpdatePopup({ setRecipePopup,
                             ))}
                         </Dropdown.Menu>
                     </Dropdown>
-                    {/* <input type="text" value={editRecipeCategory} onChange={(e) => setEditRecipeCategory(e.target.value)} /> */}
                     <h3>Ingredints:</h3>
                     <textarea
                         onChange={(e) => setIngredientsRecipe(e.target.value.split('\n'))}
@@ -112,11 +111,11 @@ function UpdatePopup({ setRecipePopup,
                         Add Photo
                     </label>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='update-popup-modal-footer' >
                     <Button variant="secondary" onClick={() => setRecipePopup(false)}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={handleSaveChanges}>
+                    <Button className='save-change-button' onClick={handleSaveChanges}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
