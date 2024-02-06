@@ -36,6 +36,7 @@ function Content() {
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
+
     const getUserId = parseInt(sessionStorage.getItem('userId'), 10);
 
     const navigate = useNavigate();

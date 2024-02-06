@@ -14,9 +14,6 @@ function RecipePart({
     decodeBase64Image,
     handleEditClick,
     handleDeleteClick,
-    handleStarHover,
-    handleStarLeave,
-    setRating,
     isAdmin,
     rating,
     isLogin,
@@ -28,15 +25,20 @@ function RecipePart({
     const [commentMessage, setCommentMessage] = useState('');
     const [photo, setPhoto] = useState('');
     const [openFile, setOpenFile] = useState(false);
-    const [starRating, setStarRating] = useState();
+    const [starRating, setStarRating] = useState(rating || 0);
     const [hoverRecipe, setHoverRecipe] = useState();
     const [ingredients, setIngredients] = useState([]);
     const [reciperating, setReciperating] = useState([]);
     const [isCommentActive, setIsCommentActive] = useState(false);
     const [getRating, setGetRating] = useState([]);
     const [recipeRatings, setRecipeRatings] = useState({});
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+    const [recipeAverageRatings, setRecipeAverageRatings] = useState({});
+
 
     const getUserId = sessionStorage.getItem('userId');
+
+    console.log('reciperatings', reciperating);
 
     const navigate = useNavigate();
 
@@ -61,15 +63,15 @@ function RecipePart({
     };
 
     const handleStarClick = (clickedStar, recipeId) => {
-        setRating(clickedStar);
-
-        // Update the ratings object with the new rating for the specific recipe
+        setStarRating((prevRatings) => ({
+            ...prevRatings,
+            [recipeId]: clickedStar,
+        }));
         setRecipeRatings((prevRatings) => ({
             ...prevRatings,
             [recipeId]: clickedStar,
         }));
     };
-
 
     const handleSendCommentClick = (getRecipeId) => {
         const fetchData = async () => {
@@ -121,7 +123,8 @@ function RecipePart({
             try {
                 const response = await api.get(`/reciperating/${recipeId}`);
                 setReciperating(response.data);
-                setIsCommentActive(!isCommentActive);
+                setIsCommentActive(true);
+                setSelectedRecipeId(recipeId);
             } catch (error) {
                 console.error('Veri alınamadı:', error);
             }
@@ -134,6 +137,7 @@ function RecipePart({
 
     const handleRecipeHover = (recipeId) => {
         setHoverRecipe(recipeId);
+        setGetRating([]);
     };
 
     useEffect(() => {
@@ -157,25 +161,27 @@ function RecipePart({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const sendNewCategory = await api.get(`/ratings/${hoverRecipe}`);
-                if (sendNewCategory.status === 200) {
-                    setGetRating(sendNewCategory.data);
+                if (hoverRecipe) {
+                    const sendNewCategory = await api.get(`/ratings/${hoverRecipe}`);
+                    if (sendNewCategory.status === 200) {
+                        setGetRating(sendNewCategory.data);
+                    }
                 }
             } catch (error) {
-                console.log('Veriler gönderilirken hata oluştu');
+                console.error('Error fetching ratings:', error);
             }
         };
         fetchData();
     }, [hoverRecipe]);
 
-    const uniqRating = reciperating.map((star) => {
-        return star.rating;
-    });
+    const dataFromApi = getRating;
 
+    console.log('dataFromApi', dataFromApi);
+    const averageResult = calculateAverage(dataFromApi);
 
     function calculateAverage(numbers) {
         if (numbers.length === 0) {
-            return 0; // Avoid division by zero
+            return 0;
         }
 
         const sum = numbers.reduce((acc, num) => acc + num, 0);
@@ -184,14 +190,38 @@ function RecipePart({
         return average;
     }
 
-    // Example usage with an array from data
-    const dataFromApi = getRating;
-    const averageResult = calculateAverage(dataFromApi);
+    const allRecipeRating = reciperating.map((item) => {
+        return item;
+    })
+    console.log('allRecipeRating', allRecipeRating)
+
+
+    useEffect(() => {
+        filterRecipes().forEach(async (filteredRecipe) => {
+            try {
+                if (allRecipeRating.length > 0) {
+                    const recipeRating = allRecipeRating.find(item => item.recipe.id === filteredRecipe.id);
+                    if (recipeRating) {
+                        const recipeRatingValue = recipeRating.rating;
+                        const recipeRatingsForRecipe = allRecipeRating.filter(item => item.recipe.id === filteredRecipe.id);
+                        const averageRatingForRecipe = calculateAverage(recipeRatingsForRecipe.map(item => item.rating));
+
+                        setRecipeAverageRatings((prevRatings) => ({
+                            ...prevRatings,
+                            [filteredRecipe.id]: averageRatingForRecipe,
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Error calculating average rating:', error);
+            }
+        });
+    }, [allRecipeRating, filterRecipes]);
 
     return (
         <>
             {filterRecipes().map((filteredRecipe, index) => (
-                <div key={index} className='container-content__recipe' onMouseEnter={() => handleRecipeHover(filteredRecipe.id)}>
+                <div key={index} className='container-content__recipe' >
                     <h2>{filteredRecipe.name}</h2>
                     <div className='container-content__recipe__altBox'>
                         <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
@@ -203,13 +233,12 @@ function RecipePart({
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <FaStar
                                         key={star}
-                                        className={`icon ${star <= (recipeRatings[filteredRecipe.id] || averageResult) ? 'ratingYellow' : 'ratingGrey'}`}
+                                        className={`icon ${star <= (recipeRatings[filteredRecipe.id] || starRating) ? 'ratingYellow' : 'ratingGrey'}`}
                                         onClick={() => handleStarClick(star, filteredRecipe.id)}
-                                        onMouseEnter={() => handleStarHover(star, filteredRecipe.id)}
-                                        onMouseLeave={() => handleStarLeave()}
                                     />
                                 ))}
                             </div>
+                            <p className='averageRating'>{recipeAverageRatings[filteredRecipe.id]}</p>
                         </div>
                         <div className='container-content__recipe__altBox__comment-area'>
                             <input
@@ -232,18 +261,22 @@ function RecipePart({
                             </label>
                         </div>
                         <h5 onClick={() => handleGetComment(filteredRecipe.id)}>Yorumları Göster</h5>
-                        {isCommentActive &&
+                        {isCommentActive && selectedRecipeId === filteredRecipe.id && (
                             <div className='userCommentArea'>
-                                {reciperating.map((filteredComment, index) => (
-                                    <div className='recipe-comments' key={index}>
-                                        <div className='recipe-comments__box'>
-                                            <h6>{filteredComment.createdBy}</h6>
-                                            <p>{filteredComment.comment}</p>
+                                {reciperating
+                                    .filter((filteredComment) => filteredComment.recipe.id === filteredRecipe.id)
+                                    .map((filteredComment, index) => (
+                                        <div className='recipe-comments' key={index}>
+                                            <div className='recipe-comments__box'>
+                                                <>
+                                                    <h6>{filteredComment.createdBy}</h6>
+                                                    <p>{filteredComment.comment}</p>
+                                                </>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
-                        }
+                        )}
 
                         <p>{filteredRecipe.explanation}</p>
                         <div className='container-content__recipe__altBox__ingredients' >
