@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import AddRecipe from "./components/addRecipe";
+import { Helmet } from 'react-helmet';
+
 import Login from "./components/login";
 import Signup from "./components/signup";
-import { Helmet } from 'react-helmet';
-import UserActivation from './components/hamburgerMenu/userActivation'
-import "./App.css";
-
 import Layout from "./components/layout";
+import AddRecipe from "./components/addRecipe";
+import UserActivation from './components/hamburgerMenu/userActivation'
+
+import "./App.css";
 
 function App() {
   return (

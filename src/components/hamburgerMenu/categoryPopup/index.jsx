@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+
+import api from '../../../interceptor';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import './index.scss'
-import api from '../../../interceptor';
 import { setIsToastActive, setToastMessage } from '../../configure';
-import { useDispatch } from 'react-redux';
+
+import './index.scss'
 
 function CategoryPopup({ setOpenCategoryPopup, openCategoryPopup }) {
     const [newCategoryName, setNewCategoryName] = useState('');

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Header from '../header';
-import Dropdown from 'react-bootstrap/Dropdown';
-import HamburgerMenu from '../hamburgerMenu';
+
 import Button from 'react-bootstrap/Button';
-import './index.scss';
+import HamburgerMenu from '../hamburgerMenu';
+import Dropdown from 'react-bootstrap/Dropdown';
+
 import api from '../../interceptor';
+import Header from '../header';
 import { setToastMessage } from '../configure';
 import { setIsToastActive } from '../configure';
+
+import './index.scss';
 
 function AddRecipe() {
     const [category, setCategory] = useState('Tatlı');
@@ -21,17 +24,11 @@ function AddRecipe() {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    console.log('categoryInfo', categoryInfo);
 
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
     const userName = sessionStorage.getItem('userName');
-    console.log('selectedCategory', selectedCategory);
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log('isHamburger', isHamburger);
-    }, [isHamburger]);
 
     const handleReturnMainPage = () => {
         navigate('/');
@@ -83,12 +80,6 @@ function AddRecipe() {
             console.error('Veri gönderilemedi:', error);
         }
     };
-
-    useEffect(() => {
-        console.log('photo', photo);
-    }, [photo]);
-
-
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];

@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaRegComment, FaStar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 import { CiEdit } from 'react-icons/ci';
 import { MdDelete } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
 import { IoMdSend } from 'react-icons/io';
+import { FaRegComment, FaStar } from 'react-icons/fa';
 import { MdOutlinePhotoLibrary } from 'react-icons/md';
+
 import api from '../../../interceptor';
 
 function RecipePart({
@@ -35,8 +37,6 @@ function RecipePart({
     const [recipeRatings, setRecipeRatings] = useState({});
 
     const getUserId = sessionStorage.getItem('userId');
-
-    console.log('reciperating', reciperating);
 
     const navigate = useNavigate();
 
@@ -154,15 +154,12 @@ function RecipePart({
         return item.id;
     });
 
-    console.log('getRecipeID', getRecipeID);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const sendNewCategory = await api.get(`/ratings/${hoverRecipe}`);
                 if (sendNewCategory.status === 200) {
                     setGetRating(sendNewCategory.data);
-                    console.log('son axiosun içindeyiz', sendNewCategory.data);
                 }
             } catch (error) {
                 console.log('Veriler gönderilirken hata oluştu');
@@ -190,12 +187,6 @@ function RecipePart({
     // Example usage with an array from data
     const dataFromApi = getRating;
     const averageResult = calculateAverage(dataFromApi);
-
-    console.log("Average:", averageResult);
-
-
-
-    console.log('uniqRating', uniqRating);
 
     return (
         <>

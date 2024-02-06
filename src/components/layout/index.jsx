@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux';
+
 import { Row, Col } from 'react-bootstrap';
+
 import Header from '../header';
 import Content from '../content';
 import HamburgerMenu from '../hamburgerMenu';
 
 import './index.scss'
-import { useSelector } from 'react-redux';
 
 
 function Layout() {
 
     const isHamburger = useSelector((state) => state.recipeBooleanControl.isHamburger);
-
-    useEffect(() => {
-        console.log('isHamburger', isHamburger)
-    }, [isHamburger]);
-
-    // ürün üstünde edit için popup açılacak bu yüzden opacity için ayrı bir state yaz is hamburger opacity'si için de ayrı olarak kontrol et 
 
     return (
         <>

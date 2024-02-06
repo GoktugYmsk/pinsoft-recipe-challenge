@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useState } from 'react';
+
 import api from '../../../interceptor';
 
 
@@ -13,8 +14,6 @@ function UpdatePopup({ setRecipePopup,
 }) {
     const [ingredienstID, setIngredientsID] = useState([]);
     const [categoryInfo, setCategoryInfo] = useState([]);
-
-    console.log('ingredientsRecipeingredientsRecipeingredientsRecipe', ingredientsRecipe);
 
     useEffect(() => {
         const fetchData = async () => {

@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import Header from "../header";
 import HamburgerMenu from "../hamburgerMenu";
 
 import "./index.scss";
-import Header from "../header";
-import { useSelector } from "react-redux";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -18,10 +18,6 @@ function Signup() {
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-
-    console.log('username', username)
-    console.log('email', email)
-    console.log('password', password)
 
     try {
       const response = await axios.post(
@@ -40,7 +36,6 @@ function Signup() {
       console.error('An error occurred during signup:', error);
     }
   };
-
 
 
   return (

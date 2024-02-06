@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import './index.scss';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { IoIosLogOut } from 'react-icons/io';
 import { FaRegUser } from 'react-icons/fa';
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useDispatch, useSelector } from 'react-redux';
+
 import { setIsHamburger } from '../configure';
-import { useNavigate } from 'react-router-dom';
+
+import './index.scss';
 
 function Header() {
     const [islogin, setIslogin] = useState(false);

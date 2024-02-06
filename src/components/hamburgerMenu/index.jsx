@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { FaInstagram, FaFacebook, FaTwitterSquare, FaYoutube } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
+import { FaInstagram, FaFacebook, FaTwitterSquare, FaYoutube } from "react-icons/fa";
+
 import api from '../../interceptor';
-import { setIsHamburger } from '../configure';
 import CategoryPopup from './categoryPopup';
+import { setIsHamburger } from '../configure';
+
 import './index.scss'
 
 function HamburgerMenu() {

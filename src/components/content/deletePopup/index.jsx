@@ -1,16 +1,15 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+
 import api from '../../../interceptor';
-import { useDispatch, useSelector } from 'react-redux';
 import { setToastMessage } from '../../configure';
 import { setIsToastActive } from '../../configure';
 
 
 function DeletePopup({ deleteRecipeId, setDeletePopup }) {
-
-    console.log('deleteRecipeId', deleteRecipeId);
 
     const dispatch = useDispatch();
 

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../../header'
-import HamburgerMenu from '..'
-import Toast from 'react-bootstrap/Toast';
-import Button from 'react-bootstrap/Button';
-import { FcApproval } from "react-icons/fc";
-import './index.scss'
 import { useDispatch, useSelector } from 'react-redux';
+
 import { FaTimes } from "react-icons/fa";
+import Toast from 'react-bootstrap/Toast';
+import { FcApproval } from "react-icons/fc";
+import Button from 'react-bootstrap/Button';
+
 import api from '../../../interceptor';
+import HamburgerMenu from '..'
+import Header from '../../header'
 import { setIsToastActive, setToastMessage } from '../../configure';
+
+import './index.scss'
 
 function UserActivation() {
     const [userList, setUserList] = useState([]);
@@ -17,8 +20,6 @@ function UserActivation() {
     const toastMessage = useSelector((state) => state.recipeStringControl.toastMessage);
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
     const dispatch = useDispatch();
-
-    console.log('userList', userList);
 
     useEffect(() => {
         const fetchData = async () => {

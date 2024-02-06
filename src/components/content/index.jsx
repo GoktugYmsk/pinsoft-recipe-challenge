@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Toast from 'react-bootstrap/Toast';
-import { MdOutlineAdd } from 'react-icons/md';
-import './index.scss';
-import api from '../../interceptor';
-import { useNavigate } from 'react-router-dom';
-import DeletePopup from './deletePopup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsToastActive, setToastMessage } from '../configure';
-import UpdatePopup from './updatePopup';
+import { useNavigate } from 'react-router-dom';
+
+import DeletePopup from './deletePopup';
+import Toast from 'react-bootstrap/Toast';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+import api from '../../interceptor';
 import RecipePart from './recipePart';
+import UpdatePopup from './updatePopup';
+import { setIsToastActive, setToastMessage } from '../configure';
+
+import './index.scss';
 
 function Content() {
     const [rating, setRating] = useState(0);
@@ -35,17 +37,6 @@ function Content() {
     const isToastACtive = useSelector((state) => state.recipeBooleanControl.isToastACtive);
 
     const getUserId = parseInt(sessionStorage.getItem('userId'), 10);
-
-
-    console.log('recipe', recipe)
-
-    useEffect(() => {
-        console.log('photo', photo)
-    }, [photo]);
-
-    /*
-    UPDATE İŞLEMLERİNE BAK
-    */
 
     const navigate = useNavigate();
     const textareRef = useRef();
