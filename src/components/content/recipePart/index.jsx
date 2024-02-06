@@ -18,6 +18,7 @@ function RecipePart({
     isAdmin,
     rating,
     isLogin,
+    recipe
 }) {
     const [inputStates, setInputStates] = useState(filterRecipes().map(() => false));
     const inputRefs = useRef(filterRecipes().map(() => React.createRef()));
@@ -30,12 +31,12 @@ function RecipePart({
     const [ingredients, setIngredients] = useState([]);
     const [reciperating, setReciperating] = useState([]);
     const [isCommentActive, setIsCommentActive] = useState(false);
+    const [getRating, setGetRating] = useState([]);
+    const [recipeRatings, setRecipeRatings] = useState({});
 
     const getUserId = sessionStorage.getItem('userId');
+
     console.log('reciperating', reciperating);
-
-
-    // console.log('ingredients', ingredients)
 
     const navigate = useNavigate();
 
@@ -59,10 +60,16 @@ function RecipePart({
         setInputStates(newInputStates);
     };
 
-    const handleStarClick = (clickedStar) => {
-        console.log('clickedStar', clickedStar);
+    const handleStarClick = (clickedStar, recipeId) => {
         setRating(clickedStar);
+
+        // Update the ratings object with the new rating for the specific recipe
+        setRecipeRatings((prevRatings) => ({
+            ...prevRatings,
+            [recipeId]: clickedStar,
+        }));
     };
+
 
     const handleSendCommentClick = (getRecipeId) => {
         const fetchData = async () => {
@@ -78,6 +85,7 @@ function RecipePart({
                 const sendRecipe = await api.post('/reciperating', newRecipe);
                 if (sendRecipe.status === 200) {
                     console.log('veriler Gönderildi');
+                    window.location.reload();
                 }
             } catch (error) {
                 console.error('Error sending recipe:', error);
@@ -107,29 +115,30 @@ function RecipePart({
         }
     };
 
-
     const handleGetComment = async (recipeId) => {
-        try {
-            const response = await api.get(`/reciperating/${recipeId}`);
-            setReciperating(response.data);
-            setIsCommentActive(!isCommentActive);
-        } catch (error) {
-            console.error('Veri alınamadı:', error);
+
+        if (isLogin) {
+            try {
+                const response = await api.get(`/reciperating/${recipeId}`);
+                setReciperating(response.data);
+                setIsCommentActive(!isCommentActive);
+            } catch (error) {
+                console.error('Veri alınamadı:', error);
+            }
+
+        }
+        else {
+            navigate('/login');
         }
     };
-
-
 
     const handleRecipeHover = (recipeId) => {
         setHoverRecipe(recipeId);
     };
 
-
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-
                 const sendNewCategory = await api.get('/ingredients');
                 if (sendNewCategory.status === 200) {
                     setIngredients(sendNewCategory.data);
@@ -137,36 +146,61 @@ function RecipePart({
             } catch (error) {
                 console.log('Veriler gönderilirken hata oluştu');
             }
-        }
+        };
         fetchData();
     }, []);
 
+    const getRecipeID = recipe.map((item) => {
+        return item.id;
+    });
 
-    // Yıldızlara bakılacak !!!!!!!!!!!!!!!
-    // yıldızlarda hala hata var sadece yıldızla ve yorum stili kaldı
-    // en son kod temizliği yaparsın
+    console.log('getRecipeID', getRecipeID);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const sendNewCategory = await api.get(`/ratings/${hoverRecipe}`);
+                if (sendNewCategory.status === 200) {
+                    setGetRating(sendNewCategory.data);
+                    console.log('son axiosun içindeyiz', sendNewCategory.data);
+                }
+            } catch (error) {
+                console.log('Veriler gönderilirken hata oluştu');
+            }
+        };
+        fetchData();
+    }, [hoverRecipe]);
 
     const uniqRating = reciperating.map((star) => {
         return star.rating;
-    })
-
-    console.log('uniqRating', uniqRating)
-
-    const avgRatings = reciperating.reduce((acc, curr) => {
-        acc[curr.recipeId] = acc[curr.recipeId] || { sum: 0, count: 0 };
-        acc[curr.recipeId].sum += curr.rating;
-        acc[curr.recipeId].count += 1;
-        return acc;
-    }, {});
+    });
 
 
+    function calculateAverage(numbers) {
+        if (numbers.length === 0) {
+            return 0; // Avoid division by zero
+        }
+
+        const sum = numbers.reduce((acc, num) => acc + num, 0);
+        const average = sum / numbers.length;
+
+        return average;
+    }
+
+    // Example usage with an array from data
+    const dataFromApi = getRating;
+    const averageResult = calculateAverage(dataFromApi);
+
+    console.log("Average:", averageResult);
+
+
+
+    console.log('uniqRating', uniqRating);
 
     return (
         <>
             {filterRecipes().map((filteredRecipe, index) => (
-                <div key={index} className='container-content__recipe'
-                    onMouseEnter={() => handleRecipeHover(filteredRecipe.id)}
-                >
+                <div key={index} className='container-content__recipe' onMouseEnter={() => handleRecipeHover(filteredRecipe.id)}>
                     <h2>{filteredRecipe.name}</h2>
                     <div className='container-content__recipe__altBox'>
                         <img src={decodeBase64Image(filteredRecipe.base64img)} alt={filteredRecipe.name} />
@@ -178,8 +212,10 @@ function RecipePart({
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <FaStar
                                         key={star}
-                                        className={`icon ${star <= avgRatings ? 'ratingYellow' : 'ratingGrey'}`}
-                                        onClick={() => handleStarClick(star)}
+                                        className={`icon ${star <= (recipeRatings[filteredRecipe.id] || averageResult) ? 'ratingYellow' : 'ratingGrey'}`}
+                                        onClick={() => handleStarClick(star, filteredRecipe.id)}
+                                        onMouseEnter={() => handleStarHover(star, filteredRecipe.id)}
+                                        onMouseLeave={() => handleStarLeave()}
                                     />
                                 ))}
                             </div>
@@ -206,18 +242,19 @@ function RecipePart({
                         </div>
                         <h5 onClick={() => handleGetComment(filteredRecipe.id)}>Yorumları Göster</h5>
                         {isCommentActive &&
-                            reciperating
-                                .filter(itemComment => itemComment.id === filteredRecipe.id)
-                                .map((filteredComment, index) => (
+                            <div className='userCommentArea'>
+                                {reciperating.map((filteredComment, index) => (
                                     <div className='recipe-comments' key={index}>
                                         <div className='recipe-comments__box'>
+                                            <h6>{filteredComment.createdBy}</h6>
                                             <p>{filteredComment.comment}</p>
-                                            <h6>{filteredComment.recipe.createdBy}</h6>
                                         </div>
                                     </div>
-                                ))
+                                ))}
+                            </div>
                         }
-                        <p> merhaba{filteredRecipe.explanation}</p>
+
+                        <p>{filteredRecipe.explanation}</p>
                         <div className='container-content__recipe__altBox__ingredients' >
                             <h4>Malzeme Listesi</h4>
                             <ul>

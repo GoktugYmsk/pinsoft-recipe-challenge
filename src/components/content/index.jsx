@@ -37,10 +37,7 @@ function Content() {
     const getUserId = parseInt(sessionStorage.getItem('userId'), 10);
 
 
-
-    console.log('ingredientsRecipe', ingredientsRecipe);
-
-
+    console.log('recipe', recipe)
 
     useEffect(() => {
         console.log('photo', photo)
@@ -212,7 +209,6 @@ function Content() {
     }, [token])
 
     const handleDeleteClick = async (recipeId) => {
-        console.log('recipeId', recipeId);
         setDeleteRecipeId(recipeId)
         setDeletePopup(true);
     };
@@ -291,7 +287,10 @@ function Content() {
                         setRating={setRating}
                         isAdmin={isAdmin}
                         rating={rating}
-                        isLogin={isLogin} />
+                        isLogin={isLogin}
+                        recipe={recipe}
+                    />
+
 
                 </div>
             </div>

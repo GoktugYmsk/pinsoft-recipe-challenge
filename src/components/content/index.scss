@@ -68,7 +68,6 @@
             p {
                 background: rgb(255, 155, 101);
                 color: white;
-                overflow: scroll;
                 height: 180px;
                 border-radius: 20px;
                 padding: 30px;
@@ -93,7 +92,7 @@
                 img {
                     width: 400px;
                     height: 400px;
-                    object-fit: cover;
+                    object-fit: contain;
                     border-radius: 20px !important;
                 }
 
@@ -168,46 +167,52 @@
                     background: rgb(255, 155, 101);
                     padding: 15px;
                     color: white;
+                    height: 220px;
                     border-radius: 10px;
+                    overflow: scroll;
                 }
 
-                .recipe-comments {
-                    display: flex;
-                    height: 120px !important;
-                    width: 100%;
 
-                    .recipe-comments__box {
+                .userCommentArea {
+                    height: 250px;
+                    width: 100%;
+                    overflow: scroll;
+
+
+                    .recipe-comments {
                         display: flex;
                         align-items: center;
-                        justify-content: center;
+                        height: 120px !important;
+                        gap: 20px;
                         width: 100%;
 
-                        p {
+                        .recipe-comments__box {
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            height: 40px;
+                            gap: 20px;
+                            width: 100%;
+
+                            p {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 100%;
+                                height: 40px;
+                            }
+
                         }
 
                         h6 {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: 100%;
+                            margin-top: 20px;
                         }
                     }
                 }
-
-
             }
         }
     }
 
 }
-
-
-
-
 
 .toast-container {
     position: absolute;
