@@ -38,7 +38,6 @@ function RecipePart({
 
     const getUserId = sessionStorage.getItem('userId');
 
-    console.log('reciperatings', reciperating);
 
     const navigate = useNavigate();
 
@@ -176,9 +175,6 @@ function RecipePart({
 
     const dataFromApi = getRating;
 
-    console.log('dataFromApi', dataFromApi);
-    const averageResult = calculateAverage(dataFromApi);
-
     function calculateAverage(numbers) {
         if (numbers.length === 0) {
             return 0;
@@ -193,7 +189,6 @@ function RecipePart({
     const allRecipeRating = reciperating.map((item) => {
         return item;
     })
-    console.log('allRecipeRating', allRecipeRating)
 
 
     useEffect(() => {

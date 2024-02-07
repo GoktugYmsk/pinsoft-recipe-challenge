@@ -50,14 +50,36 @@
 
 @keyframes slide-in {
     from {
-        transform: translateX(100%);
+        transform: translateY(100%);
     }
 
     to {
-        transform: translateX(0);
+        transform: translateY(0);
     }
 }
 
 .hamburgerActive {
     display: flex;
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .container-hamburger {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 50px;
+        width: 100%;
+        height: 60vh;
+        clip-path: none;
+        overflow: scroll;
+
+        .container-hamburger__top {
+            display: flex;
+        }
+
+    }
+
 }

@@ -73,7 +73,7 @@ function UserActivation() {
             <div className='container-userActivation'>
                 <div className='container-userActivation__box'>
                     {Array.isArray(userList) && userList.map((item, index) => (
-                        <div key={index}>
+                        <div className='container-userActivation__box__top' key={index}>
                             <div className='container-userActivation__box__list'>
                                 <table className='container-userActivation__box__list__userInfo'>
                                     <tbody>

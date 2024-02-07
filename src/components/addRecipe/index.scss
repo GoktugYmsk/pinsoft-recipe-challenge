@@ -99,3 +99,40 @@
 .opacityActive {
     opacity: 0.4;
 }
+
+@media screen and (max-width: 768px) {
+    .container-addRecipe {
+        display: flex;
+        width: 100%;
+
+        .container-addRecipe__box {
+            width: 90%;
+
+            .select {
+
+                .addContent-dropdown {
+                    width: 120px;
+                    font-size: 12px;
+                }
+
+                .file-input {
+                    font-style: 12px;
+                }
+            }
+
+            .container-addRecipe__box__down {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                align-items: center;
+
+                button {
+                    width: 120px;
+                    font-size: 12px;
+                }
+            }
+
+        }
+    }
+
+}

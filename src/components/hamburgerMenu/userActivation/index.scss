@@ -81,3 +81,54 @@
 .inactive-icon {
     font-size: 35px;
 }
+
+@media screen and (max-width: 768px) {
+    .container-userActivation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .container-userActivation__box {
+            display: flex;
+            align-items: flex-start;
+            height: 90%;
+            width: 90%;
+
+            .container-userActivation__box__top {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+
+                .container-userActivation__box__list {
+                    display: flex;
+                    flex-direction: column;
+                    /* Updated to column for responsiveness */
+                    align-items: center;
+                    /* Centering items */
+                    width: 100%;
+                    /* Use full width */
+
+                    .active-icon,
+                    .inactive-icon {
+                        font-size: 18px;
+                    }
+
+                    .container-userActivation__box__list__userInfo {
+                        td {
+                            font-size: 10px;
+                        }
+                    }
+
+                    .container-userActivation__box__list__buttons {
+                        button {
+                            width: 60px;
+                            font-size: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -205,11 +205,9 @@ function Content() {
         setDeletePopup(true);
     };
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-
                 const sendNewCategory = await api.get('/category');
                 if (sendNewCategory.status === 200) {
                     setCategoryInfo(sendNewCategory.data);

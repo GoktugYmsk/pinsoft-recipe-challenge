@@ -329,12 +329,13 @@
         .altContent {
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
             justify-content: flex-start;
             width: 100%;
 
             .container-content__recipe {
                 display: flex;
-                width: 100%;
+                width: 98%;
 
                 .container-content__recipe__altBox {
                     width: 100%;
@@ -343,8 +344,42 @@
                         width: 180px;
                         height: 180px;
                     }
+
+                    .container-content__recipe__altBox__icons {
+                        display: flex;
+                        gap: 5px;
+
+                        .icon {
+                            font-size: 20px;
+                        }
+
+                        .point {
+                            .icon {
+                                font-size: 16px;
+                            }
+                        }
+
+                        .deleteIcon {
+                            font-size: 18px;
+                        }
+
+                        .averageRating {
+                            display: flex;
+                        }
+
+                        .sendCommentIcon {
+                            font-size: 18px;
+                        }
+
+
+                    }
                 }
             }
+
+            .recipeCommentPhotoIcon {
+                font-size: 18px;
+            }
+
         }
     }
 
